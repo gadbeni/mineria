@@ -134,6 +134,11 @@
                                         <input type="text" name="origen" id="origen" class="form-control text">
 
                                     </div> 
+                                    <div class="form-group col-md-3">
+                                        <small>Intermedio</small>
+                                        <input type="text" name="intermedio" id="intermedio" class="form-control text">
+
+                                    </div> 
 
                                     <div class="form-group col-md-3">
                                         <small>Final</small>

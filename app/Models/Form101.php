@@ -25,6 +25,7 @@ class Form101 extends Model
         'medioTransporte',
         'unidaddemedida1',
         'origen',
+        'intermedio',
         'final',
         'matricula',
         'nombreConductor',

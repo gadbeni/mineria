@@ -122,18 +122,18 @@
             <tr>
                 <th style="text-align: left; height:15px">MEDIO DE TRANSPORTE</th>
                 <td style="text-align: center; height:15px">{{$forms->medioTransporte}}</td>
-                <th style="text-align: left; height:15px">ORIGEN</th>
-                <td style="text-align: center; height:15px">{{$forms->origen}}</td>
-                <th style="text-align: left; height:15px">DESTINO</th>
-                <td style="text-align: center; height:15px">{{$forms->final}}</td>
+                
                 <th style="text-align: left; height:15px">PLACA / MATRICULA</th>
                 <td style="text-align: center; height:15px">{{$forms->matricula}}</td>
+
+                <th style="text-align: left; height:15px">NOMBRE DE CONDUCTOR</th>
+                <td style="text-align: center; height:15px">{{$forms->nombreConductor}}</td>
+
+               
             </tr>
         </thead>
         <thead>
             <tr>
-                <th style="text-align: left; height:15px">NOMBRE DE CONDUCTOR</th>
-                <td style="text-align: center; height:15px">{{$forms->nombreConductor}}</td>
                 <th style="text-align: left; height:15px">LICENCIA DEL CONDUCTOR</th>
                 <td style="text-align: center; height:15px">{{$forms->licenciaConducir}}</td>
                 <th style="text-align: left; height:15px">NOMBRE DEL ENCARGADO DEL TRANSPORTE</th>
@@ -144,6 +144,28 @@
         </thead>
 
     </table>
+
+    <br>
+    <tr>
+        <small style="text-align: center; text-light; height:25px; width: 100%">DATOS DE CIRCULACION</small>
+    </tr>
+    <br>
+    <table style="width: 100%; font-size: 10px" border="1" class="print-friendly" cellspacing="0" cellpadding="2">
+        <thead>
+            <tr>
+                <th style="text-align: left; height:15px">ORIGEN</th>
+                <td style="text-align: center; height:15px">{{$forms->origen}}</td>
+                
+                <th style="text-align: left; height:15px">INTERMEDIO</th>
+                <td style="text-align: center; height:15px">{{$forms->intermedio}}</td>
+
+                <th style="text-align: left; height:15px">DESTINO</th>
+                <td style="text-align: center; height:15px">{{$forms->final}}</td>
+            </tr>
+        </thead>
+
+    </table>
+
     <br>
     <table style="width: 100%; font-size: 10px" border="1" class="print-friendly" cellspacing="0" cellpadding="2">
         <thead>

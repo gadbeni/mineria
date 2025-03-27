@@ -92,6 +92,7 @@ class Form101Controller extends Controller
                 'nombreAreaMinero'=>$request->nombreAreaMinero,
                 'medioTransporte'=>$request->medioTransporte,
                 'origen'=>$request->origen,
+                'intermedio'=>$request->intermedio,
                 'final'=>$request->final,
                 'matricula'=>$request->matricula,
                 'nombreConductor'=>$request->nombreConductor,
