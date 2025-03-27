@@ -9,7 +9,7 @@
             <div class="row">
                 <div class="col-md-8">
                     <h1 id="subtitle" class="page-title">
-                        <i class="fa-solid fa-building"></i> Empresas / Compañia
+                        <i class="fa-solid fa-building"></i> Empresas
                     </h1>
                     @if(auth()->user()->hasPermission('add_form101s'))
                         <a href="{{ route('companies.create') }}" class="btn btn-success btn-add-new">

@@ -20,9 +20,13 @@
                 <div class="row">
                     <div class="col-md-12">
                         <div class="panel panel-bordered">
-                            <div class="panel-heading"><h6 class="panel-title">Detalle del Prestamos</h6></div>
+                            <div class="panel-heading"><h6 class="panel-title">Detalle del Certificado</h6></div>
                             <div class="panel-body">
                                 <div class="row">
+                                    <div class="form-group col-md-6">
+                                        <small>Código Operador Minero</small>
+                                        <input type="text-danger" name="miningOperator" id="miningOperator" style="text-align: right" class="form-control text" required>
+                                    </div> 
                                     <div class="form-group col-md-3">
                                         <small>Fecha Emision</small>
                                         <input type="date" name="dateStart" class="form-control text" required>
@@ -37,11 +41,7 @@
                                         <b class="text-danger" id="label-amount" style="display:none">El codigo ingresado ya existe..</b>
 
                                     </div>    --}}
-                                    {{-- <div class="form-group col-md-3">
-                                        <small>Código Operador Minero</small>
-                                        <input type="number" name="miningOperator" id="miningOperator" style="text-align: right" class="form-control text" required>
-                                    </div>    --}}
-                                                                    
+                                                            
                                 </div>
                                 <div class="row">
                                     <div class="form-group col-md-6">
@@ -56,7 +56,7 @@
                                     <div class="form-group col-md-6">
                                         <small>Firma del Certificado</small>
                                         <select name="signature_id" id="guarantor_id" class="form-control select2" required>
-                                            <option value="" disabled selected>-- Seleccionar un garante --</option>
+                                            <option value="" disabled selected>-- Seleccionar Representante --</option>
                                             @foreach ($signature as $item)
                                                 <option value="{{$item->id}}">{{$item->alias}} {{$item->first_name}} {{$item->last_name}} - {{$item->job}}</option>
                                             @endforeach

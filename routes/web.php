@@ -46,7 +46,7 @@ Route::group(['prefix' => 'admin'], function () {
 
 
 
-    // Route::get('download/log/{cad?}', [AjaxController::class, 'downloadLg'])->name('download.log');
+    Route::get('download/log/{cad?}', [AjaxController::class, 'downloadLg'])->name('download.log');
 });
 
 Route::get('/admin/clear-cache', function() {

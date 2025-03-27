@@ -64,6 +64,8 @@ class Form101Controller extends Controller
         // return 1;
         $company = Company::where('deleted_at', null)->get();
         $type = TypeMineral::where('deleted_at', null)->get();
+       // $type = MedioTransporte::where('deleted_at', null)->get();
+        //$type = UnidadMedida::where('deleted_at', null)->get();
 
         return view('form101.add', compact('company', 'type'));
 
@@ -75,7 +77,32 @@ class Form101Controller extends Controller
         try {
             // return $request;
 
-            $form = Form101::create($request->all());
+            // $form = Form101::create($request->all());
+            $form = Form101::create([
+                'certificate_id'=>$request->certificate_id,
+                'typeMineral_id'=>$request->typeMineral_id,
+                'leyMineral'=>$request->leyMineral,
+                'pesoBruto'=>$request->pesoBruto,
+                'humedad'=>$request->humedad,
+                'pesoNeto'=>$request->pesoNeto,
+                'lote'=>$request->lote,
+                'municipio'=>$request->municipio,
+                'localidad'=>$request->localidad,
+                'codigoAreaMinero'=>$request->codigoAreaMinero,
+                'nombreAreaMinero'=>$request->nombreAreaMinero,
+                'medioTransporte'=>$request->medioTransporte,
+                'origen'=>$request->origen,
+                'final'=>$request->final,
+                'matricula'=>$request->matricula,
+                'nombreConductor'=>$request->nombreConductor,
+                'licenciaConducir'=>$request->licenciaConducir, 
+                'nombreEncargadoTrasporte'=>$request->nombreEncargadoTrasporte,
+                'ciEncargadoTrasporte'=>$request->ciEncargadoTrasporte,
+                'observation'=>$request->observation,
+                'unidaddemedida1'=>$request->unidadmedida_id,
+            ]);
+
+            // return $form;
             $form->update(['code'=>'SDMEH-'.str_pad($form->id, 6, "0", STR_PAD_LEFT), 'register_id'=>Auth::user()->id]);
 
         
@@ -86,23 +113,23 @@ class Form101Controller extends Controller
             return redirect()->route('form101s.index')->with(['message' => 'Registrado exitosamente exitosamente.', 'alert-type' => 'success']);            
         } catch (\Throwable $th) {
             DB::rollBack();
-          
+            return 0;
             return redirect()->route('form101s.index')->with(['message' => 'Ocurrió un error.', 'alert-type' => 'error']);
         }
     }
 
     public function prinf($form)
     {
-
+        // return 1;
         $forms = Form101::with(['certificate.company', 'typeMineral'])
                     ->where('id', $form)->where('deleted_at', NULL)->orderBy('id', 'DESC')->first();
 
 
 
-                    // $html2pdf = new HTML2PDF('P', 'A4', 'es', true, 'UTF-8', 3);
-                    // $html2pdf->pdf->SetDisplayMode('fullpage');
-                    // $html2pdf->writeHTML($form, isset($_GET['vuehtml']));
-                    // $html2pdf->Output('PDF-CF.pdf');
+                    //$html2pdf = new HTML2PDF('P', 'A4', 'es', true, 'UTF-8', 3);
+                   // $html2pdf->pdf->SetDisplayMode('fullpage');
+                    //$html2pdf->writeHTML($form, isset($_GET['vuehtml']));
+                    //$html2pdf->Output('PDF-CF.pdf');
 
         $qr = base64_encode(QrCode::size(80)->generate('Numero de Formulario: '.$forms->code.', Numero COM: '.$forms->certificate->code.', Numero NIM: '.$forms->certificate->company->nim.', Numero de NIT: '.$forms->certificate->company->nit.', Razon Social: '.$forms->certificate->company->razon.', Representante Legal: '.$forms->certificate->company->representative));
                     
@@ -115,19 +142,18 @@ class Form101Controller extends Controller
 
  
 
-        // return view('form101.prinf', compact('forms', 'qr'));
+         return view('form101.prinf', compact('forms', 'qr'));
 
-        // view()->share('forms', $forms);
-        // $pdf = PDF::loadView('form101.prinf',compact('forms'));
+        view()->share('forms', $forms);
+         $pdf = PDF::loadView('form101.prinf',compact('forms'));
 
-        // return $pdf->download('Formulario 101.pdf');
+         return $pdf->download('Formulario 101.pdf');
 
 
 
 
 
         return PDF::loadView('form101.prinf',compact('forms', 'qr') )
-        // ->setPaper('A4', 'landscape')
         ->setPaper('A4', 'portrait')
         ->stream('Formulario 101.pdf');
 

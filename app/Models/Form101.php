@@ -23,6 +23,7 @@ class Form101 extends Model
         'codigoAreaMinero',
         'nombreAreaMinero',
         'medioTransporte',
+        'unidaddemedida1',
         'origen',
         'final',
         'matricula',

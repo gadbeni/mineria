@@ -20,7 +20,7 @@
                 <div class="row">
                     <div class="col-md-12">
                         <div class="panel panel-bordered">
-                            <div class="panel-heading"><h6 class="panel-title">Detalle de la Empresa</h6></div>
+                            <div class="panel-heading"><small class="panel-title">Detalle de la Empresa</small></div>
                             <div class="panel-body">
                                 <div class="row">
                                     <div class="form-group col-md-12">
@@ -53,6 +53,15 @@
                                         <input type="text" name="leyMineral" id="leyMineral" style="text-align: right" class="form-control text" required>
 
                                     </div>  
+
+                                    <div class="form-group col-md-3">
+                                        <small>Unidad de Medida</small>
+                                        <select name="unidadmedida_id"  class="form-control select2" required>
+                                            <option disabled selected>--Selecciona una opción--</option>
+                                                <option value="Kg" > Kg </option>
+                                                <option value="Gr" > Gr </option> 
+                                        </select>
+                                    </div>
 
                                     <div class="form-group col-md-3">
                                         <small>Peso Bruto</small>
@@ -94,11 +103,11 @@
 
                                     </div> 
 
-                                    <div class="form-group col-md-3">
+                                   <div class="form-group col-md-3">
                                         <small>Código Área Minera</small>
                                         <input type="text" name="codigoAreaMinero" id="codigoAreaMinero" class="form-control text" required>
 
-                                    </div> 
+                                    </div>
                                     <div class="form-group col-md-3">
                                         <small>Nombre Área Minera</small>
                                         <input type="text" name="nombreAreaMinero" id="nombreAreaMinero" class="form-control text" required>
@@ -109,9 +118,15 @@
                                 <hr>
 
                                 <div class="row">
+                                    <div class="panel-heading"><small class="panel-title">Detalle del Transporte</small></div>
                                     <div class="form-group col-md-3">
                                         <small>Medio de Transporte</small>
-                                        <input type="text" name="medioTransporte" id="medioTransporte" class="form-control text" required>
+                                        <select name="medioTransporte"  class="form-control select2" required>
+                                            <option value="" disabled selected>--Selecciona una opción--</option>
+                                                <option value="Terrestre" > Terrestre </option>
+                                                <option value="Aereo" > Aereo </option>
+                                                <option value="Fluvial" > Fluvial </option>
+                                        </select>
                                     </div>  
 
                                     <div class="form-group col-md-3">
@@ -148,7 +163,7 @@
                                     </div>  
 
                                     <div class="form-group col-md-3">
-                                        <small>Cedula De Identidad del Encargado del Transporte</small>
+                                        <small>C.I. Encargado del Transporte</small>
                                         <input type="text" name="ciEncargadoTrasporte" id="ciEncargadoTrasporte" class="form-control text">
 
                                     </div> 
@@ -156,7 +171,7 @@
 
                                 <div class="row">
                                     <div class="form-group col-md-12">
-                                        <small>Observaciones</small>
+                                        <small class="panel-title">Observaciones</small>
                                         <textarea name="observation" id="observation" class="form-control" cols="30" rows="3"></textarea>
 
                                     </div> 

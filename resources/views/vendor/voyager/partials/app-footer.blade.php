@@ -1,13 +1,13 @@
 <footer class="app-footer">
     <div class="site-footer-right">
         @if (rand(1,100) == 100)
-            <i class="voyager-rum-1"></i> {{ __('voyager::theme.footer_copyright2') }}
+        <h3 style="margin-bottom: 0px; margin-top: 5px">
+           DESARROLLADO POR LA UNIDAD DE SOFTWARE<br>
+        </h3>
         @else
-            {!! __('voyager::theme.footer_copyright') !!} <a href="http://thecontrolgroup.com" target="_blank">The Control Group</a>
-        @endif
-        @php $version = Voyager::getVersion(); @endphp
-        @if (!empty($version))
-            - {{ $version }}
+        <h6 style="margin-bottom: 0px; margin-top: 5px">
+            Desarrollado por la Unidad De Software - Dirección Departamental De Minería, Energía e Hidrocarburos GAD-BENI<br>
+        </h6>
         @endif
     </div>
 </footer>

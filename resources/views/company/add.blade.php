@@ -78,11 +78,11 @@
                                         <small>Municipio Productor</small>
                                         <input type="text" name="municipe" id="municipe" class="form-control text" required>
                                     </div>     
-                                    <div class="form-group col-md-3">
-                                        <small>Código Municipio Minero</small>
+                                {{-- <div class="form-group col-md-3">
+                                        <small>Código Área Minero</small>
                                         <input type="text" name="municipeMiningOperator" id="municipeMiningOperator" class="form-control text" required>
 
-                                    </div>                
+                                    </div>--}}
                                 </div>
                                 <hr>
                                 <h6 class="panel-title">Detalle del Usuario</h6>
