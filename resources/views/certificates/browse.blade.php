@@ -48,7 +48,7 @@
                                                     {{--<th>Codigo</th>--}}       
                                                     <th>Fecha Emision</th>                    
                                                     <th>Fecha Valides</th>                    
-                                                    <th style="text-align: center">Estado</th> 
+                                                   {{--<th style="text-align: center">Estado</th>--}} 
                                                     <th class="text-right">Acciones</th>
                                                 </tr>
                                             </thead>
@@ -59,7 +59,7 @@
                                                         <td>{{$item->company->nit}}</td>
                                                         <td>{{$item->company->codeMiningOperator}}</td>
                                                         <td>{{$item->company->representative}}</td>
-                                                       <td>{{$item->code}}</td>
+                                                       {{--<td>{{$item->code}}</td>--}}
                                                         <td>{{ date("d-m-Y", strtotime($item->dateStart)) }}</td>
                                                         <td>{{ date("d-m-Y", strtotime($item->dateFinish)) }}</td>
                                                         <td class="no-sort no-click bread-actions text-right">

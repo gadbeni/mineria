@@ -93,12 +93,12 @@
                                 <div class="row">
 
                                     <div class="form-group col-md-3">
-                                        <small>Municipio</small>
-                                        <input type="text" name="municipio" id="municipio" class="form-control text" required>
+                                        <small>Código Municipio Productor</small>
+                                        <input type="number" name="municipio" id="municipio" class="form-control text" required>
                                     </div>  
 
                                     <div class="form-group col-md-3">
-                                        <small>Localidad</small>
+                                        <small>Localidad / Comunidad</small>
                                         <input type="text" name="localidad" id="localidad" class="form-control text" required>
 
                                     </div> 

@@ -75,9 +75,6 @@ class Form101Controller extends Controller
     {
         DB::beginTransaction();
         try {
-            // return $request;
-
-            // $form = Form101::create($request->all());
             $form = Form101::create([
                 'certificate_id'=>$request->certificate_id,
                 'typeMineral_id'=>$request->typeMineral_id,
@@ -104,7 +101,7 @@ class Form101Controller extends Controller
             ]);
 
             // return $form;
-            $form->update(['code'=>'SDMEH-'.str_pad($form->id, 6, "0", STR_PAD_LEFT), 'register_id'=>Auth::user()->id]);
+            $form->update(['code'=>'DDMEH-'.str_pad($form->id, 6, "0", STR_PAD_LEFT), 'register_id'=>Auth::user()->id]);
 
         
 

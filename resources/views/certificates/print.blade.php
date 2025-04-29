@@ -95,8 +95,8 @@
                 {{--<img src="data:image/png;base64, {!! $qr !!}">--}}
                 {{-- <img src="data:image/svg+xml;base64,{{ base64_encode($qr) }}"> --}}
                 {{-- <img src="data:image/svg+xml;utf8, {{ $qr }}" /> --}}
-                {!! QrCode::size(120)->generate('CODIGO: '.$certificate->code.', OPERADOR MINERO: '.$certificate->company->miningOperator.', NIT: '.$certificate->company->nit.', NIM: '.$certificate->company->nim.', ACTIVIDAD: '.$certificate->company->activity.', REPRESENTANTE LEGAL: '.$certificate->company->representative.
-            ', CEDULA DE IDENTIDAD: '.$certificate->company->ci.', MUNICIPIO: '.$certificate->company->municipe.', FECHA DE EMISION: '.date("d-m-Y", strtotime($certificate->dateStart)).', VALIDO HASTA: '.date("d-m-Y", strtotime($certificate->dateFinish))); !!}
+                {!! QrCode::size(120)->generate('ID: '.$certificate->id.', CODIGO OPERADOR MINERO: '.$certificate->company->codeMiningOperator.', NIT: '.$certificate->company->nit.', NIM: '.$certificate->company->nim.', ACTIVIDAD: '.$certificate->company->activity.', REPRESENTANTE LEGAL: '.$certificate->company->representative.
+            ', C.I.: '.$certificate->company->ci.', MUNICIPIO: '.$certificate->company->municipe.', FECHA DE EMISION: '.date("d-m-Y", strtotime($certificate->dateStart)).', VALIDO HASTA: '.date("d-m-Y", strtotime($certificate->dateFinish))); !!}
             
             @php
             $meses = array("Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre");
