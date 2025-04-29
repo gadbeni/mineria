@@ -6,9 +6,9 @@
                     <div class="logo-icon-container">
                         <?php $admin_logo_img = Voyager::setting('admin.icon_image', ''); ?>
                         @if($admin_logo_img == '')
-                            <img src="{{ asset('images/icon.png') }}" alt="Logo Icon">
+                            <img src="{{ asset('images/mineria.png') }}" alt="Logo Icon">
                         @else
-                            <img src="{{ Voyager::image($admin_logo_img) }}" alt="Logo Icon">
+                            <img src="{{ Voyager::setting('image/icon.png') }}" alt="Logo Icon">
                         @endif
                     </div>
                     <div class="title">{{Voyager::setting('admin.title', 'VOYAGER')}}</div>
@@ -19,7 +19,7 @@
                  style="background-image:url({{ Voyager::image( Voyager::setting('admin.bg_image'), asset('images/banner.jpg') ) }}); background-size: cover; background-position: 0px;">
                 <div class="dimmer"></div>
                 <div class="panel-content">
-                    <img src="{{ $user_avatar }}" class="avatar" alt="{{ Auth::user()->name }} avatar">
+                    <img src="{{ asset('images/default.png') }}" class="avatar" alt="{{ Auth::user()->name }} avatar">
                     <h4>{{ ucwords(Auth::user()->name) }}</h4>
                     <p>{{ Auth::user()->email }}</p>
 

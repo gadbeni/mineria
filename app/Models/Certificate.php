@@ -30,12 +30,20 @@ class Certificate extends Model
 
     public function company()
     {
-        return $this->belongsTo(Company::class, 'company_id');
+        return $this->belongsTo(Company::class, 'company_id')->withTrashed();
     }
+
+
+
+
+    // public function company()
+    // {
+    //     return $this->belongsTo(Company::class, 'company_id')->onlyTrashed();
+    // }
 
     public function signature()
     {
-        return $this->belongsTo(Signature::class, 'signature_id');
+        return $this->belongsTo(Signature::class, 'signature_id')->withTrashed();
     }
 }
 

@@ -25,6 +25,9 @@ class CertificateController extends Controller
     {
         $certificate = Certificate::with(['company', 'signature', 'code'])
             ->where('deleted_at', null)->get();
+        // return $certificate;
+
+        // return 1;
         return view('certificates.browse', compact('certificate'));
     }
 
@@ -45,15 +48,14 @@ class CertificateController extends Controller
             {
                 return redirect()->route('certificates.create')->with(['message' => 'El Codigo debe ser diferente', 'alert-type' => 'error']);
             }
-            // $code = Code::create(['code'=>$request->code, 'initials' => 'EMCC', 'registerUser_id'=>Auth::user()->id]);
+            //$code = Code::create(['code'=>$request->code, 'initials' => 'EMCC', 'registerUser_id'=>Auth::user()->id]);
             // return 1;
             $cert = Certificate::create([
                 'company_id'=>$request->company_id,
-                'signature_id'=>$request->signature_id,
-    
+                'signature_id'=>$request->signature_id,   
                 'dateStart'=>$request->dateStart,
                 'dateFinish'=>$request->dateFinish,
-                // 'miningOperator'=>$request->miningOperator,
+                'miningOperator'=>$request->miningOperator,
                 'registerUser_id'=>Auth::user()->id
             ]);
 
@@ -82,15 +84,15 @@ class CertificateController extends Controller
         $certificate = Certificate::with(['company', 'signature', 'code'])
             ->where('deleted_at', null)->where('id', $id)->first();
 
-        // return $certificate;
+        //return $certificate;
 
         // $qrcode = base64_encode(QrCode::format('svg')->size(200)->errorCorrection('H')->generate('string'));
 
         $qr = base64_encode(QrCode::size(120)->generate('CODIGO: '.$certificate->code.', OPERADOR MINERO: '.$certificate->company->miningOperator.', NIT: '.$certificate->company->nit.', NIM: '.$certificate->company->nim.', ACTIVIDAD: '.$certificate->company->activity.', REPRESENTANTE LEGAL: '.$certificate->company->representative.
             ', CEDULA DE IDENTIDAD: '.$certificate->company->ci.', MUNICIPIO: '.$certificate->company->municipe.', VALIDO HASTA: '.date("d-m-Y", strtotime($certificate->dateFinish)).', FECHA DE EMISION: '.date("d-m-Y", strtotime($certificate->dateStart))));
             
-            // return $certificate;
-        // return view('certificates.print',compact('certificate'));
+         //return $certificate;
+         return view('certificates.print',compact('certificate'));
 
  
         // $people = Person::where('id', $id)->where('deleted_at', null)->first();
@@ -112,7 +114,6 @@ class CertificateController extends Controller
 
         } catch (\Throwable $th) {
             DB::rollBack();
-            return 0;
             return redirect()->route('certificates.create')->with(['message' => 'Ocurrió un error.', 'alert-type' => 'error']);
         }
     }

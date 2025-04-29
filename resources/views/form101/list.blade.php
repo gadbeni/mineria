@@ -3,7 +3,7 @@
         <table id="dataTable" class="table table-bordered table-hover">
             <thead>
                 <tr>                    
-                    <th style="text-align: center">Codigo</th>
+                    <th style="text-align: center">C.O.M.</th>
                     <th style="text-align: center">Empresa/Compañia</th>
                     <th style="text-align: center">Tipo de Mineral</th>
                     <th style="text-align: center">Peso Bruto</th>
@@ -12,18 +12,17 @@
                     <th style="text-align: center">Localidad</th>   
                     <th style="text-align: center">Código Área Minera</th>   
                     <th style="text-align: center">Nombre Área Minera</th>   
-                    <th class="text-right">Acciones</th>
+                    <th atyle="text-align: center">Acciones</th>
                 </tr>
             </thead>
             <tbody>
                 @forelse ($data as $item)
                 <tr>
-                    <td><small>{{ $item->code }}</small></td>
+                    <td><small>{{ $item->certificate->company->codeMiningOperator }}</small><br></td>
                     <td>
                         <table> 
                             <tr>
                                 <td>
-                                    <small>{{ $item->certificate->code }}</small><br>
                                     <small>Nit:</small> {{ $item->certificate->company->nit }} <br>
                                     <small>Razon Social:</small> {{ $item->certificate->company->razon }} <br>
                                     <small>Representante:</small> {{ $item->certificate->company->representative }} <br>

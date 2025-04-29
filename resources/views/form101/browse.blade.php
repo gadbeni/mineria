@@ -33,11 +33,10 @@
                             <div class="col-sm-10">
                                 <div class="dataTables_length" id="dataTable_length">
                                     <label>Mostrar <select id="select-paginate" class="form-control input-sm">
-                                        <option value="10">10</option>
                                         <option value="25">25</option>
                                         <option value="50">50</option>
                                         <option value="100">100</option>
-                                    </select> registros</label>
+                                    </select> Registros</label>
                                 </div>
                             </div>
                             <div class="col-sm-2">

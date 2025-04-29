@@ -25,7 +25,7 @@
     {{-- SEO --}}
     <meta property="og:title"         content="{{ Voyager::setting('admin.title') }}" />
     <meta property="og:description"   content="{{ Voyager::setting('admin.description') }}" />
-    <meta property="og:image"         content="{{ $admin_favicon == '' ? asset('images/icon.png') : Voyager::image($admin_favicon) }}" />
+    <meta property="og:image"         content="{{ $admin_favicon == '' ? asset('images/mineria.png') : Voyager::image($admin_favicon) }}" />
 
     <style>
         body {
@@ -65,7 +65,7 @@
                     <div class="logo-title-container">
                         <?php $admin_logo_img = Voyager::setting('admin.icon_image', ''); ?>
                         @if($admin_logo_img == '')
-                            <img class="img-responsive pull-left flip logo hidden-xs animated fadeIn" src="{{ asset('images/icon.png') }}" alt="Logo Icon">
+                            <img class="img-responsive pull-left flip logo hidden-xs animated fadeIn" src="{{ asset('images/mineria1.png') }}" alt="Logo Icon">
                         @else
                             <img class="img-responsive pull-left flip logo hidden-xs animated fadeIn" src="{{ Voyager::image($admin_logo_img) }}" alt="Logo Icon">
                         @endif
