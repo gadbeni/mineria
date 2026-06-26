@@ -63,7 +63,7 @@
                     {{ $isExpired ? 'CADUCADO' : 'VIGENTE' }}
                 </span>
             </div>
-            <div class="badge-sub">Este Formulario 101 es auténtico y fue emitido por la D.D.M.E.H.</div>
+            <div class="badge-sub">Este Formulario 101 de Transporte de Minerales y Metales, es auténtico y fue emitido por la Dirección Departamental de Minería, Energía e Hidrocarburos (D.D.M.E.H.)</div>
         </div>
     </div>
 

@@ -52,7 +52,7 @@
         <div class="badge-icon">&#10003;</div>
         <div>
             <div class="badge-text">CERTIFICADO VERIFICADO</div>
-            <div class="badge-sub">Este C.O.M. es auténtico y fue emitido por la D.D.M.E.H.</div>
+            <div class="badge-sub">Este Código de Operador Minero (C.O.M) es auténtico y fue emitido por la Dirección Departamental de Minería, Energía e Hidrocarburos (D.D.M.E.H.)</div>
         </div>
     </div>
 
