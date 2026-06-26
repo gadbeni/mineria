@@ -72,6 +72,13 @@
     <table width="100%">
         <tr>
             <td style="text-align:left; width: 25%">
+            @php
+            $meses = array("Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre");
+            $fecha = Carbon\Carbon::parse($certificate->dateStart);
+            $mes = $meses[($fecha->format('n')) - 1];
+            $fecha1 = Carbon\Carbon::parse($certificate->dateFinish);
+            $mes1 = $meses[($fecha1->format('n')) - 1];
+            @endphp
             <div class="text" style="text-transform: uppercase;">
                 <p style="font-size: 10px;">
                     <b>NIT: {{$certificate->company->nit}}</b><br>
@@ -80,8 +87,11 @@
                     <b>REPRESENTANTE LEGAL: {{$certificate->company->representative}}</b><br>
                     <b>CEDULA DE IDENTIDAD: {{$certificate->company->ci}}</b><br>
                     <b>MUNICIPIO: {{$certificate->company->municipe}}</b> <br>
-                   {{--<b>CODIGO ÁREA MINERO: {{$certificate->company->municipeMiningOperator}}</b>--}} 
+                    <b>CODIGO ÁREA MINERO: {{$certificate->company->municipeMiningOperator}}</b>
                 </p>
+            </div>
+            <div class="text">
+                <p style="font-size: 10px;"><b>FECHA DE EMISION:</b> {{$fecha->format('d')}} de {{$mes}} de {{$fecha->format('Y')}} <br><b>VALIDO HASTA:</b> {{$fecha1->format('d')}} de {{$mes1}} de {{$fecha1->format('Y')}}</p>
             </div>
         </td>
 
@@ -91,25 +101,8 @@
                 <b style="text-transform: uppercase;">{{$certificate->signature->job}}</b>
             </td>
             <td style="text-align: right; width:32%">
-                {{-- <img src="data:image/png:base64{!! base64_encode($qr)!!}" alt=""> --}}
-                {{--<img src="data:image/png;base64, {!! $qr !!}">--}}
-                {{-- <img src="data:image/svg+xml;base64,{{ base64_encode($qr) }}"> --}}
-                {{-- <img src="data:image/svg+xml;utf8, {{ $qr }}" /> --}}
                 {!! QrCode::size(120)->errorCorrection('M')->generate(url('/verify/certificate/'.$certificate->verification_token)) !!}
-                <div style="font-size:7px; text-align:center; margin-top:3px">Escanee el código QR<br>para verificar autenticidad</div>
-
-            @php
-            $meses = array("Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre");
-            $fecha = Carbon\Carbon::parse($certificate->dateStart);
-            $mes = $meses[($fecha->format('n')) - 1];
-
-             $fecha1 = Carbon\Carbon::parse($certificate->dateFinish);
-            $mes1 = $meses[($fecha->format('n')) - 1];
-            // $inputs['Fecha'] =  . ' de ' . $mes . ' de ' . $fecha->format('Y');
-             @endphp
-            <div class="text">
-                <p style="font-size: 8px;"><b>FECHA DE EMISION:</b> {{$fecha->format('d')}} de {{$mes}} de {{$fecha->format('Y')}} <br><b>VALIDO HASTA:</b>  {{$fecha1->format('d')}} de {{$mes1}} de {{$fecha1->format('Y')}}<br></p>
-            </div>
+                <div style="font-size:7px; text-align:ligth; margin-top:3px">Escanee el código QR<br>para verificar autenticidad</div>
         </td>
         </tr>
     </table>
