@@ -1,0 +1,51 @@
+<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
+
+class Certificate extends Model
+{
+    use HasFactory, SoftDeletes;
+
+    protected $dates = ['deleted_at'];
+
+    protected $fillable = [
+        'company_id',
+        'signature_id',
+        'miningOperator',
+        'code',
+        'verification_token',
+        'dateStart',
+        'dateFinish',
+        'status',
+        'registerUser_id',
+        'deleted_at'
+    ];
+
+    public function code()
+    {
+        return $this->belongsTo(Code::class, 'code_id');
+    }
+
+    public function company()
+    {
+        return $this->belongsTo(Company::class, 'company_id')->withTrashed();
+    }
+
+
+
+
+    // public function company()
+    // {
+    //     return $this->belongsTo(Company::class, 'company_id')->onlyTrashed();
+    // }
+
+    public function signature()
+    {
+        return $this->belongsTo(Signature::class, 'signature_id')->withTrashed();
+    }
+}
+

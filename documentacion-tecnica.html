@@ -1,0 +1,978 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Documentación Técnica — Sistema de Gestión Minera DDMEH</title>
+  <style>
+    /* ──── RESET Y BASE ──── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Times New Roman', Times, serif;
+      font-size: 11pt;
+      color: #1a1a1a;
+      background: #f0f0f0;
+      line-height: 1.55;
+    }
+
+    /* ──── PÁGINA ──── */
+    .page {
+      width: 210mm;
+      min-height: 297mm;
+      background: #fff;
+      margin: 12mm auto;
+      padding: 20mm 22mm 22mm 25mm;
+      box-shadow: 0 2px 18px rgba(0,0,0,.18);
+      position: relative;
+    }
+
+    /* ──── ENCABEZADO INSTITUCIONAL ──── */
+    .inst-header {
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+      border-bottom: 3px solid #1a5c2a;
+      padding-bottom: 10px;
+      margin-bottom: 18px;
+    }
+    .inst-logo {
+      width: 72px;
+      flex-shrink: 0;
+    }
+    .inst-logo svg { width: 100%; }
+    .inst-titles { flex: 1; }
+    .inst-titles .gov-name {
+      font-size: 9pt;
+      font-weight: bold;
+      color: #1a5c2a;
+      text-transform: uppercase;
+      letter-spacing: .5px;
+      line-height: 1.3;
+    }
+    .inst-titles .doc-title {
+      font-size: 13pt;
+      font-weight: bold;
+      color: #1a1a1a;
+      margin-top: 4px;
+    }
+    .inst-titles .doc-code {
+      font-size: 9pt;
+      color: #666;
+      margin-top: 2px;
+    }
+
+    /* ──── PORTADA ──── */
+    .cover {
+      text-align: center;
+      padding: 40px 0 30px;
+    }
+    .cover .cover-emblem {
+      margin: 0 auto 18px;
+      width: 90px;
+      height: 90px;
+      border: 4px solid #1a5c2a;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 36pt;
+    }
+    .cover h1 {
+      font-size: 17pt;
+      color: #1a2340;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      line-height: 1.3;
+      margin-bottom: 8px;
+    }
+    .cover h2 {
+      font-size: 12pt;
+      color: #1a5c2a;
+      font-weight: normal;
+      margin-bottom: 30px;
+    }
+    .cover-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 10pt;
+      margin-top: 20px;
+    }
+    .cover-table td {
+      border: 1px solid #c5c5c5;
+      padding: 7px 12px;
+      text-align: left;
+    }
+    .cover-table td:first-child {
+      background: #f2f7f2;
+      font-weight: bold;
+      width: 42%;
+      color: #1a5c2a;
+    }
+    .cover-footer {
+      margin-top: 40px;
+      font-size: 9pt;
+      color: #666;
+      border-top: 1px solid #ccc;
+      padding-top: 10px;
+    }
+
+    /* ──── ÍNDICE ──── */
+    .toc-title {
+      font-size: 13pt;
+      font-weight: bold;
+      color: #1a5c2a;
+      border-bottom: 2px solid #1a5c2a;
+      padding-bottom: 4px;
+      margin-bottom: 14px;
+    }
+    .toc-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      padding: 3px 0;
+      font-size: 10.5pt;
+    }
+    .toc-item.toc-h2 { font-weight: bold; margin-top: 6px; }
+    .toc-item.toc-h3 { padding-left: 18px; font-size: 10pt; color: #333; }
+    .toc-dots {
+      flex: 1;
+      border-bottom: 1px dotted #aaa;
+      margin: 0 6px;
+      height: 1em;
+    }
+    .toc-pg { font-size: 9.5pt; color: #444; }
+
+    /* ──── SECCIONES ──── */
+    .section-title {
+      font-size: 13pt;
+      font-weight: bold;
+      color: #fff;
+      background: #1a5c2a;
+      padding: 7px 12px;
+      margin: 24px 0 14px;
+      border-radius: 3px;
+    }
+    .subsection-title {
+      font-size: 11.5pt;
+      font-weight: bold;
+      color: #1a5c2a;
+      border-left: 4px solid #1a5c2a;
+      padding-left: 8px;
+      margin: 18px 0 10px;
+    }
+    .subsubsection-title {
+      font-size: 10.5pt;
+      font-weight: bold;
+      color: #1a2340;
+      margin: 12px 0 6px;
+    }
+
+    p { margin-bottom: 8px; }
+
+    /* ──── TABLAS ──── */
+    table.doc-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 9.5pt;
+      margin: 10px 0 16px;
+    }
+    table.doc-table th {
+      background: #1a5c2a;
+      color: #fff;
+      padding: 7px 10px;
+      text-align: left;
+      font-weight: bold;
+    }
+    table.doc-table td {
+      border: 1px solid #c8d8c8;
+      padding: 6px 10px;
+      vertical-align: top;
+    }
+    table.doc-table tr:nth-child(even) td { background: #f4f9f4; }
+    table.doc-table code {
+      background: #e8f0fe;
+      color: #1a3a6a;
+      padding: 1px 5px;
+      border-radius: 3px;
+      font-size: 9pt;
+      font-family: 'Courier New', monospace;
+    }
+
+    /* ──── LISTAS ──── */
+    ul.doc-list, ol.doc-list {
+      padding-left: 20px;
+      margin: 6px 0 10px;
+    }
+    ul.doc-list li, ol.doc-list li { margin-bottom: 4px; font-size: 10.5pt; }
+
+    /* ──── CAJAS DE INFORMACIÓN ──── */
+    .info-box {
+      background: #f2f7f2;
+      border: 1px solid #b0d0b0;
+      border-left: 5px solid #1a5c2a;
+      border-radius: 3px;
+      padding: 10px 14px;
+      margin: 10px 0;
+      font-size: 10pt;
+    }
+    .warn-box {
+      background: #fffbf0;
+      border-left: 5px solid #d4a017;
+      padding: 10px 14px;
+      margin: 10px 0;
+      font-size: 10pt;
+    }
+
+    /* ──── DIAGRAMA DE ENTIDADES (ASCII) ──── */
+    .erd {
+      font-family: 'Courier New', monospace;
+      font-size: 8.5pt;
+      background: #f8f8f8;
+      border: 1px solid #ddd;
+      padding: 14px 16px;
+      white-space: pre;
+      line-height: 1.4;
+      overflow-x: auto;
+      margin: 10px 0;
+    }
+
+    /* ──── FIRMA / APROBACIÓN ──── */
+    .sign-block {
+      display: flex;
+      gap: 30px;
+      margin-top: 30px;
+    }
+    .sign-col {
+      flex: 1;
+      text-align: center;
+      border-top: 1px solid #333;
+      padding-top: 8px;
+      font-size: 9.5pt;
+    }
+    .sign-col strong { display: block; font-size: 10pt; }
+
+    /* ──── PIE DE PÁGINA ──── */
+    .page-footer {
+      position: absolute;
+      bottom: 12mm;
+      left: 25mm;
+      right: 22mm;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 8pt;
+      color: #888;
+      border-top: 1px solid #ddd;
+      padding-top: 5px;
+    }
+
+    /* ──── SALTO DE PÁGINA ──── */
+    .page-break { page-break-after: always; }
+
+    /* ──── IMPRIMIR ──── */
+    @media print {
+      body { background: #fff; }
+      .page {
+        width: 100%;
+        margin: 0;
+        padding: 15mm 18mm 20mm 22mm;
+        box-shadow: none;
+      }
+      .no-print { display: none; }
+    }
+
+    /* ──── BOTÓN DESCARGA ──── */
+    .btn-print {
+      position: fixed;
+      top: 18px;
+      right: 24px;
+      background: #1a5c2a;
+      color: #fff;
+      border: none;
+      padding: 11px 22px;
+      font-size: 11pt;
+      border-radius: 6px;
+      cursor: pointer;
+      box-shadow: 0 3px 10px rgba(0,0,0,.25);
+      z-index: 9999;
+      font-family: Arial, sans-serif;
+    }
+    .btn-print:hover { background: #145020; }
+  </style>
+</head>
+<body>
+
+<!-- Botón imprimir/descargar -->
+<button class="btn-print no-print" onclick="window.print()">⬇ Descargar / Imprimir PDF</button>
+
+<!-- ═══════════════════════════════════════
+     PÁGINA 1 — PORTADA
+════════════════════════════════════════ -->
+<div class="page">
+  <div class="inst-header">
+    <div class="inst-titles">
+      <div class="gov-name">Gobierno Autónomo Departamental del Beni<br/>Dirección de Sistemas y Telecomunicaciones</div>
+      <div class="doc-title">Documentación Técnica de Sistema Informático</div>
+      <div class="doc-code">Ref. Instructivo DIR.SIST.TEL. N°01/2026 — Fecha: 09 de junio de 2026</div>
+    </div>
+  </div>
+
+  <div class="cover">
+    <div class="cover-emblem">⛏️</div>
+    <h1>Sistema de Gestión Minera<br/>DDMEH</h1>
+    <h2>Dirección de Minería, Energía e Hidrocarburos<br/>Gobierno Autónomo Departamental del Beni</h2>
+
+    <table class="cover-table">
+      <tr><td>Nombre oficial del sistema</td><td>Sistema de Gestión Minera — DDMEH</td></tr>
+      <tr><td>Unidad propietaria</td><td>Dirección de Minería, Energía e Hidrocarburos — GAD Beni</td></tr>
+      <tr><td>Responsable funcional</td><td>Dirección de Minería, Energía e Hidrocarburos</td></tr>
+      <tr><td>Responsable técnico</td><td>Ing. Jessica Willy Mejia — Dir. de Sistemas y Telecomunicaciones GAD Beni</td></tr>
+      <tr><td>Versión actual</td><td>1.0.0</td></tr>
+      <tr><td>Estado del sistema</td><td>Producción</td></tr>
+      <tr><td>Fecha de inicio del proyecto</td><td>Noviembre 2022</td></tr>
+      <tr><td>Fecha de puesta en producción</td><td>2023</td></tr>
+      <tr><td>Clasificación del documento</td><td>Interno — Uso exclusivo GAD Beni</td></tr>
+      <tr><td>Elaborado por</td><td>Ing. Jessica Willy Mejia</td></tr>
+      <tr><td>Revisado por</td><td>Ing. Sergio Coca Martinez — Director de Sistemas y Telecomunicaciones</td></tr>
+      <tr><td>Fecha del documento</td><td>09 de junio de 2026</td></tr>
+    </table>
+
+    <div class="cover-footer">
+      Gobierno Autónomo Departamental del Beni — Plaza Principal Mcal. José Ballivián — Trinidad, Beni, Bolivia<br/>
+      <em>"Beni Productivo, Sostenible y Regulado"</em>
+    </div>
+  </div>
+
+  <div class="page-footer">
+    <span>Sistema DDMEH — Documentación Técnica v1.0</span>
+    <span>GAD Beni — Dirección de Sistemas y Telecomunicaciones</span>
+    <span>Pág. 1</span>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════
+     PÁGINA 2 — ÍNDICE
+════════════════════════════════════════ -->
+<div class="page">
+  <div class="inst-header">
+    <div class="inst-titles">
+      <div class="gov-name">Gobierno Autónomo Departamental del Beni — Dir. de Sistemas y Telecomunicaciones</div>
+      <div class="doc-title">Sistema de Gestión Minera DDMEH — Documentación Técnica</div>
+    </div>
+  </div>
+
+  <div class="toc-title">ÍNDICE DE CONTENIDOS</div>
+
+  <div class="toc-item toc-h2"><span>1. Información General del Sistema</span><span class="toc-dots"></span><span class="toc-pg">3</span></div>
+  <div class="toc-item toc-h2"><span>2. Marco Normativo y Procedimental</span><span class="toc-dots"></span><span class="toc-pg">4</span></div>
+  <div class="toc-item toc-h3"><span>2.1 Normativa de respaldo</span><span class="toc-dots"></span><span class="toc-pg">4</span></div>
+  <div class="toc-item toc-h3"><span>2.2 Procedimientos automatizados</span><span class="toc-dots"></span><span class="toc-pg">4</span></div>
+  <div class="toc-item toc-h3"><span>2.3 Descripción de procesos de negocio</span><span class="toc-dots"></span><span class="toc-pg">4</span></div>
+  <div class="toc-item toc-h2"><span>3. Arquitectura Tecnológica</span><span class="toc-dots"></span><span class="toc-pg">5</span></div>
+  <div class="toc-item toc-h3"><span>3.1 Frontend</span><span class="toc-dots"></span><span class="toc-pg">5</span></div>
+  <div class="toc-item toc-h3"><span>3.2 Backend</span><span class="toc-dots"></span><span class="toc-pg">5</span></div>
+  <div class="toc-item toc-h3"><span>3.3 Motor de Base de Datos</span><span class="toc-dots"></span><span class="toc-pg">5</span></div>
+  <div class="toc-item toc-h3"><span>3.4 Infraestructura</span><span class="toc-dots"></span><span class="toc-pg">6</span></div>
+  <div class="toc-item toc-h2"><span>4. Ambientes de Trabajo</span><span class="toc-dots"></span><span class="toc-pg">6</span></div>
+  <div class="toc-item toc-h2"><span>5. Flujo Funcional del Sistema</span><span class="toc-dots"></span><span class="toc-pg">7</span></div>
+  <div class="toc-item toc-h3"><span>5.1 Módulo Empresas Mineras</span><span class="toc-dots"></span><span class="toc-pg">7</span></div>
+  <div class="toc-item toc-h3"><span>5.2 Módulo Certificado COM</span><span class="toc-dots"></span><span class="toc-pg">7</span></div>
+  <div class="toc-item toc-h3"><span>5.3 Módulo Formulario DDMEH</span><span class="toc-dots"></span><span class="toc-pg">8</span></div>
+  <div class="toc-item toc-h2"><span>6. Componentes Técnicos — Base de Datos</span><span class="toc-dots"></span><span class="toc-pg">9</span></div>
+  <div class="toc-item toc-h2"><span>7. APIs e Integraciones</span><span class="toc-dots"></span><span class="toc-pg">11</span></div>
+  <div class="toc-item toc-h2"><span>8. Seguridad</span><span class="toc-dots"></span><span class="toc-pg">12</span></div>
+  <div class="toc-item toc-h2"><span>9. Metodología de Desarrollo</span><span class="toc-dots"></span><span class="toc-pg">13</span></div>
+  <div class="toc-item toc-h2"><span>10. Gestión del Código Fuente</span><span class="toc-dots"></span><span class="toc-pg">14</span></div>
+  <div class="toc-item toc-h2"><span>11. Monitoreo y Operación</span><span class="toc-dots"></span><span class="toc-pg">14</span></div>
+  <div class="toc-item toc-h2"><span>12. Demostración Práctica</span><span class="toc-dots"></span><span class="toc-pg">15</span></div>
+  <div class="toc-item toc-h2"><span>13. Firmas y Entrega Formal</span><span class="toc-dots"></span><span class="toc-pg">16</span></div>
+
+  <div class="page-footer">
+    <span>Sistema DDMEH — Documentación Técnica v1.0</span>
+    <span>GAD Beni — Dirección de Sistemas y Telecomunicaciones</span>
+    <span>Pág. 2</span>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════
+     PÁGINA 3 — SECCIÓN 1 Y 2
+════════════════════════════════════════ -->
+<div class="page">
+  <div class="inst-header">
+    <div class="inst-titles">
+      <div class="gov-name">Gobierno Autónomo Departamental del Beni — Dir. de Sistemas y Telecomunicaciones</div>
+      <div class="doc-title">Sistema de Gestión Minera DDMEH — Documentación Técnica</div>
+    </div>
+  </div>
+
+  <!-- SECCIÓN 1 -->
+  <div class="section-title">1. INFORMACIÓN GENERAL DEL SISTEMA</div>
+
+  <table class="doc-table">
+    <tr><th style="width:38%">Atributo</th><th>Detalle</th></tr>
+    <tr><td>a) Nombre oficial del sistema</td><td>Sistema de Gestión Minera — DDMEH (Declaración Jurada de Extracción/Transporte de Minerales)</td></tr>
+    <tr><td>b) Objetivo general</td><td>Digitalizar y centralizar el registro de empresas mineras, la emisión de Certificados de Operador Minero (COM) y el control de formularios de extracción/transporte de minerales para la Dirección de Minería, Energía e Hidrocarburos del GAD Beni.</td></tr>
+    <tr><td>c) Objetivos específicos</td><td>
+      1. Mantener un padrón actualizado de operadores mineros registrados.<br/>
+      2. Emitir certificados COM con código único, QR y firma digital.<br/>
+      3. Registrar y controlar los Formularios DDMEH (Form 101) de extracción y transporte.<br/>
+      4. Garantizar trazabilidad y auditoría de todas las operaciones.<br/>
+      5. Proveer acceso diferenciado por rol de usuario.
+    </td></tr>
+    <tr><td>d) Unidad propietaria</td><td>Dirección de Minería, Energía e Hidrocarburos — GAD Beni</td></tr>
+    <tr><td>e) Responsable funcional</td><td>Dirección de Minería, Energía e Hidrocarburos — GAD Beni</td></tr>
+    <tr><td>f) Responsable técnico</td><td>Ing. Jessica Willy Mejia — Dirección de Sistemas y Telecomunicaciones GAD Beni</td></tr>
+    <tr><td>g) Fecha de inicio del proyecto</td><td>Noviembre de 2022</td></tr>
+    <tr><td>h) Fecha de puesta en producción</td><td>2023 — URL: https://mineria.beni.gob.bo</td></tr>
+    <tr><td>i) Estado actual del sistema</td><td><strong>Producción</strong> — Sistema en operación continua</td></tr>
+    <tr><td>j) Versión actual</td><td>1.0.0</td></tr>
+  </table>
+
+  <!-- SECCIÓN 2 -->
+  <div class="section-title">2. MARCO NORMATIVO Y PROCEDIMENTAL</div>
+
+  <div class="subsection-title">2.1 Normativa de Respaldo</div>
+  <ul class="doc-list">
+    <li><strong>Ley N° 535 de Minería y Metalurgia</strong> — Regula la actividad minera en Bolivia y establece los requisitos de registro y certificación de operadores mineros.</li>
+    <li><strong>Ley N° 031 — Marco de Autonomías y Descentralización</strong> — Faculta a los Gobiernos Autónomos Departamentales para la administración de recursos naturales en su jurisdicción.</li>
+    <li><strong>Decreto Supremo N° 29975</strong> — Reglamento a la Ley de Minería sobre extracción, transporte y comercialización de minerales.</li>
+    <li><strong>Resolución Administrativa de la Dirección de Minería GAD Beni</strong> — Normativa interna para la emisión del Certificado de Operador Minero (COM).</li>
+    <li><strong>Normativa interna de la Dirección de Sistemas y Telecomunicaciones GAD Beni</strong> — Instructivo DIR.SIST.TEL. N°01/2026.</li>
+  </ul>
+
+  <div class="subsection-title">2.2 Procedimientos Institucionales Automatizados</div>
+  <ul class="doc-list">
+    <li>Registro y habilitación de empresas operadoras mineras en el padrón departamental.</li>
+    <li>Emisión y revocación del Certificado de Operador Minero (COM) con código único.</li>
+    <li>Registro de Declaraciones Juradas de Extracción y Transporte de Minerales (Formulario DDMEH / Form 101).</li>
+    <li>Control de vigencia de certificados (fecha inicio / fecha fin).</li>
+    <li>Verificación pública de validez de certificados vía código QR.</li>
+  </ul>
+
+  <div class="subsection-title">2.3 Descripción de Procesos de Negocio</div>
+  <p>El sistema automatiza el siguiente flujo institucional:</p>
+  <div class="info-box">
+    <strong>Proceso Central:</strong> Registro Empresa → Emisión COM → Registro DDMEH → Verificación QR<br/>
+    Un operador minero no puede obtener un Formulario DDMEH sin contar con un Certificado COM vigente vinculado a su empresa registrada.
+  </div>
+
+  <div class="page-footer">
+    <span>Sistema DDMEH — Documentación Técnica v1.0</span>
+    <span>GAD Beni — Dirección de Sistemas y Telecomunicaciones</span>
+    <span>Pág. 3</span>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════
+     PÁGINA 4 — SECCIÓN 3: ARQUITECTURA
+════════════════════════════════════════ -->
+<div class="page">
+  <div class="inst-header">
+    <div class="inst-titles">
+      <div class="gov-name">Gobierno Autónomo Departamental del Beni — Dir. de Sistemas y Telecomunicaciones</div>
+      <div class="doc-title">Sistema de Gestión Minera DDMEH — Documentación Técnica</div>
+    </div>
+  </div>
+
+  <div class="section-title">3. ARQUITECTURA TECNOLÓGICA</div>
+
+  <div class="subsection-title">3.1 Frontend</div>
+  <table class="doc-table">
+    <tr><th>Componente</th><th>Detalle</th></tr>
+    <tr><td>Framework / Motor de plantillas</td><td>Laravel Blade (integrado en Laravel 8.x) — No utiliza framework JavaScript separado (Vue/React/Angular)</td></tr>
+    <tr><td>Framework CSS</td><td>Bootstrap 4.x (provisto por TCG Voyager ^1.6)</td></tr>
+    <tr><td>Librerías principales</td><td>jQuery (AJAX para búsqueda dinámica), DataTables (listados paginados), Select2 (selectores enriquecidos)</td></tr>
+    <tr><td>Generación de QR</td><td>SimpleSoftwareIO/simple-qrcode ~4 (SVG/PNG embebido en vistas Blade)</td></tr>
+    <tr><td>Generación de documentos</td><td>DomPDF ^2.0 (PDF server-side), HTML2PDF ^5.2 (spipu)</td></tr>
+    <tr><td>Herramientas de construcción</td><td>Laravel Mix (webpack) — assets compilados con <code>npm run dev / prod</code></td></tr>
+    <tr><td>Vistas personalizadas</td><td><code>resources/views/vendor/voyager/</code> — sobreescritura de plantillas Voyager</td></tr>
+  </table>
+
+  <div class="subsection-title">3.2 Backend</div>
+  <table class="doc-table">
+    <tr><th>Componente</th><th>Detalle</th></tr>
+    <tr><td>Framework</td><td>Laravel Framework ^8.75</td></tr>
+    <tr><td>Lenguaje de programación</td><td>PHP ^7.3 | ^8.0</td></tr>
+    <tr><td>Panel de administración</td><td>TCG Voyager ^1.6 (BREAD — Browse, Read, Edit, Add, Delete)</td></tr>
+    <tr><td>ORM / Base de datos</td><td>Eloquent ORM (incluido en Laravel) con SoftDeletes en todas las entidades principales</td></tr>
+    <tr><td>Autenticación</td><td>Laravel Sanctum ^2.11 (API tokens) + Voyager Auth (sesiones web)</td></tr>
+    <tr><td>HTTP Client</td><td>GuzzleHTTP ^7.0.1 (integración con API WhatsApp institucional)</td></tr>
+    <tr><td>Librerías adicionales</td><td>
+      <code>barryvdh/laravel-dompdf ^2.0</code> — Exportación PDF<br/>
+      <code>spipu/html2pdf ^5.2</code> — Exportación HTML a PDF<br/>
+      <code>fruitcake/laravel-cors ^2.0</code> — Manejo CORS<br/>
+      <code>orangehill/iseed ^3.0</code> — Generación de seeders<br/>
+      <code>laravel/tinker ^2.5</code> — REPL para mantenimiento
+    </td></tr>
+    <tr><td>Campo de formulario custom</td><td><code>App\FormFields\registerUserIdFormField</code> — campo Voyager personalizado para auditoría de autoría</td></tr>
+    <tr><td>Patrón arquitectónico</td><td>MVC (Modelo — Vista — Controlador) con Transacciones DB atómicas</td></tr>
+  </table>
+
+  <div class="subsection-title">3.3 Motor de Base de Datos</div>
+  <table class="doc-table">
+    <tr><th>Atributo</th><th>Detalle</th></tr>
+    <tr><td>Nombre del motor</td><td>MySQL</td></tr>
+    <tr><td>Versión recomendada</td><td>MySQL 5.7+ / MySQL 8.0</td></tr>
+    <tr><td>Configuración relevante</td><td>Charset: utf8mb4 — Collation: utf8mb4_unicode_ci — Motor de tablas: InnoDB (soporte transacciones)</td></tr>
+    <tr><td>Estrategia de respaldo</td><td>Respaldo lógico mediante <code>mysqldump</code> programado. Recomendación: respaldo diario incremental + semanal completo.</td></tr>
+    <tr><td>Migraciones</td><td>18 archivos de migración Laravel — control de versión de esquema mediante <code>php artisan migrate</code></td></tr>
+    <tr><td>Seeders</td><td>Seeder de firma institucional preconfigurado (Nathaly Davilia Antezana — GAD Beni)</td></tr>
+  </table>
+
+  <div class="subsection-title">3.4 Infraestructura</div>
+  <table class="doc-table">
+    <tr><th>Componente</th><th>Detalle</th></tr>
+    <tr><td>Sistema operativo del servidor</td><td>Linux (Ubuntu Server 20.04 LTS recomendado)</td></tr>
+    <tr><td>Virtualización</td><td>Compatible con entornos virtualizados (VMware, KVM, Proxmox)</td></tr>
+    <tr><td>Contenedores</td><td>Dockerfile disponible en la raíz del proyecto para despliegue Docker</td></tr>
+    <tr><td>Servidor web</td><td>Apache 2.4 / Nginx 1.18+ con soporte para PHP-FPM</td></tr>
+    <tr><td>HTTPS</td><td>Forzado en producción mediante cabecera <code>X-Forwarded-Proto</code> en <code>AppServiceProvider</code></td></tr>
+    <tr><td>URL de producción</td><td>https://mineria.beni.gob.bo</td></tr>
+  </table>
+
+  <div class="page-footer">
+    <span>Sistema DDMEH — Documentación Técnica v1.0</span>
+    <span>GAD Beni — Dirección de Sistemas y Telecomunicaciones</span>
+    <span>Pág. 4</span>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════
+     PÁGINA 5 — SECCIÓN 4 Y 5
+════════════════════════════════════════ -->
+<div class="page">
+  <div class="inst-header">
+    <div class="inst-titles">
+      <div class="gov-name">Gobierno Autónomo Departamental del Beni — Dir. de Sistemas y Telecomunicaciones</div>
+      <div class="doc-title">Sistema de Gestión Minera DDMEH — Documentación Técnica</div>
+    </div>
+  </div>
+
+  <div class="section-title">4. AMBIENTES DE TRABAJO</div>
+
+  <table class="doc-table">
+    <tr><th>Ambiente</th><th>Descripción</th><th>URL / Acceso</th><th>Responsable</th></tr>
+    <tr>
+      <td><strong>Desarrollo</strong></td>
+      <td>Entorno local de los desarrolladores. Se utiliza <code>php artisan serve</code> o Docker local. Variables de entorno en <code>.env</code> apuntando a DB local.</td>
+      <td>http://localhost:8000</td>
+      <td>Ing. Jessica Willy Mejia</td>
+    </tr>
+    <tr>
+      <td><strong>Pruebas / QA</strong></td>
+      <td>No existe ambiente de QA separado documentado. Las pruebas se realizan en entorno local antes del despliegue a producción.</td>
+      <td>Local / Interno</td>
+      <td>Equipo de Sistemas GAD Beni</td>
+    </tr>
+    <tr>
+      <td><strong>Producción</strong></td>
+      <td>Servidor institucional GAD Beni. HTTPS habilitado. Variables de entorno configuradas en <code>.env</code> de producción (no versionado).</td>
+      <td>https://mineria.beni.gob.bo</td>
+      <td>Dir. de Sistemas y Telecomunicaciones GAD Beni</td>
+    </tr>
+  </table>
+
+  <div class="info-box">
+    <strong>Variables de entorno requeridas en producción:</strong> <code>APP_ENV=production</code>, <code>APP_DEBUG=false</code>, <code>APP_URL=https://mineria.beni.gob.bo</code>, <code>DB_HOST</code>, <code>DB_DATABASE</code>, <code>DB_USERNAME</code>, <code>DB_PASSWORD</code>.
+  </div>
+
+  <!-- SECCIÓN 5 -->
+  <div class="section-title">5. FLUJO FUNCIONAL DEL SISTEMA</div>
+
+  <div class="subsection-title">5.1 Módulo: Registro de Empresas Mineras</div>
+  <p><strong>Descripción:</strong> Permite registrar y gestionar el padrón de empresas operadoras mineras del Departamento del Beni.</p>
+
+  <table class="doc-table">
+    <tr><th>Aspecto</th><th>Detalle</th></tr>
+    <tr><td>Proceso principal</td><td>Registro de nueva empresa con datos NIT, NIM, razón social, representante legal, actividad y municipio.</td></tr>
+    <tr><td>Caso de uso principal</td><td>Administrador registra empresa → Sistema valida NIT único → Crea empresa y usuario vinculado automáticamente.</td></tr>
+    <tr><td>Entradas</td><td>NIT, NIM, razón social, actividad minera, representante legal, CI, teléfono, municipio, email y contraseña del usuario.</td></tr>
+    <tr><td>Salidas</td><td>Registro en tabla <code>companies</code> + Usuario en tabla <code>users</code> con <code>company_id</code> asignado.</td></tr>
+    <tr><td>Validaciones</td><td>NIT único (no duplicado), email del nuevo usuario único en el sistema.</td></tr>
+    <tr><td>Regla de negocio</td><td>Cada empresa registrada obtiene automáticamente un usuario del sistema con rol <em>user</em> para acceso restringido.</td></tr>
+    <tr><td>Búsqueda AJAX</td><td>Endpoint <code>GET /admin/companies/certificate/list?q=</code> — busca por razón social, NIT, representante, actividad y código COM.</td></tr>
+  </table>
+
+  <div class="subsection-title">5.2 Módulo: Certificado de Operador Minero (COM)</div>
+  <p><strong>Descripción:</strong> Gestiona la emisión, consulta y revocación de los Certificados de Operador Minero (COM) con código único y código QR.</p>
+
+  <table class="doc-table">
+    <tr><th>Aspecto</th><th>Detalle</th></tr>
+    <tr><td>Proceso principal</td><td>Emisión de COM vinculado a empresa registrada, con firma de funcionario, fechas de vigencia y código auto-generado.</td></tr>
+    <tr><td>Caso de uso principal</td><td>Admin selecciona empresa → selecciona firma → ingresa fechas → Sistema genera código COM-XXXXXX → Emisión completada.</td></tr>
+    <tr><td>Entradas</td><td>Empresa (<code>company_id</code>), firma funcionario (<code>signature_id</code>), fecha inicio, fecha fin, operador minero.</td></tr>
+    <tr><td>Salidas</td><td>Certificado en tabla <code>certificates</code> con código <code>COM-000001</code> (formato auto-incremental de 6 dígitos).</td></tr>
+    <tr><td>Validaciones</td><td>Código COM único validado vía AJAX antes del registro. Transacción atómica con rollback ante error.</td></tr>
+    <tr><td>Regla de negocio</td><td>El código COM se genera como <code>'COM-' + str_pad($id, 6, '0', STR_PAD_LEFT)</code> tras la inserción exitosa.</td></tr>
+    <tr><td>Impresión / QR</td><td>Acceso público sin autenticación en <code>GET /certificates/{id}/print</code>. QR contiene: código, operador, NIT, NIM, actividad, representante, CI, municipio, validez.</td></tr>
+  </table>
+
+  <div class="page-footer">
+    <span>Sistema DDMEH — Documentación Técnica v1.0</span>
+    <span>GAD Beni — Dirección de Sistemas y Telecomunicaciones</span>
+    <span>Pág. 5</span>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════
+     PÁGINA 6 — SECCIÓN 5 CONT. + 6 BD
+════════════════════════════════════════ -->
+<div class="page">
+  <div class="inst-header">
+    <div class="inst-titles">
+      <div class="gov-name">Gobierno Autónomo Departamental del Beni — Dir. de Sistemas y Telecomunicaciones</div>
+      <div class="doc-title">Sistema de Gestión Minera DDMEH — Documentación Técnica</div>
+    </div>
+  </div>
+
+  <div class="subsection-title">5.3 Módulo: Formulario DDMEH — Form 101</div>
+  <p><strong>Descripción:</strong> Registro y control de las Declaraciones Juradas de Extracción y Transporte de Minerales, vinculadas obligatoriamente a un COM vigente.</p>
+
+  <table class="doc-table">
+    <tr><th>Aspecto</th><th>Detalle</th></tr>
+    <tr><td>Proceso principal</td><td>Registro del formulario de extracción/transporte con datos del mineral, área minera, vehículo y conductor.</td></tr>
+    <tr><td>Caso de uso</td><td>Funcionario busca empresa → selecciona COM → ingresa datos de extracción y transporte → Sistema genera código DDMEH-XXXXXX.</td></tr>
+    <tr><td>Entradas de extracción</td><td>Tipo mineral, ley mineral, peso bruto, humedad, peso neto, lote, municipio, localidad, código área minero, nombre área minero.</td></tr>
+    <tr><td>Entradas de transporte</td><td>Medio de transporte, origen, destino final, matrícula, nombre conductor, licencia de conducir, nombre y CI del encargado de transporte.</td></tr>
+    <tr><td>Salidas</td><td>Registro en tabla <code>form101s</code> con código <code>DDMEH-000001</code>. Impresión PDF con QR de trazabilidad.</td></tr>
+    <tr><td>Validaciones</td><td>El COM seleccionado debe pertenecer a la empresa correspondiente. Funcionarios solo ven registros de su <code>company_id</code>.</td></tr>
+    <tr><td>Regla de negocio</td><td>El código DDMEH se genera como <code>'DDMEH-' + str_pad($id, 6, '0', STR_PAD_LEFT)</code>. La eliminación registra motivo y usuario que eliminó.</td></tr>
+    <tr><td>Búsqueda AJAX</td><td>Endpoint paginado <code>GET /admin/form101s/ajax/list/{search?}</code> — busca por razón social, NIT, código COM, código DDMEH y tipo mineral.</td></tr>
+    <tr><td>Filtro por rol</td><td>Rol <em>funcionario</em> aplica filtro automático <code>company_id = Auth::user()->company_id</code> en todas las consultas.</td></tr>
+  </table>
+
+  <!-- SECCIÓN 6 -->
+  <div class="section-title">6. COMPONENTES TÉCNICOS — BASE DE DATOS</div>
+
+  <div class="subsection-title">6.1 Modelo Entidad-Relación</div>
+
+  <div class="erd">
+┌─────────────┐          ┌──────────────────┐          ┌─────────────────┐
+│   companies │          │   certificates   │          │    form101s     │
+├─────────────┤   1..N   ├──────────────────┤   1..N   ├─────────────────┤
+│ id (PK)     │◄────────►│ id (PK)          │◄────────►│ id (PK)         │
+│ nit         │          │ company_id (FK)  │          │ code            │
+│ nim         │          │ signature_id(FK) │          │ certificate_id  │
+│ razon       │          │ code             │          │ typeMineral_id  │
+│ activity    │          │ dateStart        │          │ leyMineral      │
+│ representative│         │ dateFinish       │          │ pesoBruto       │
+│ ci          │          │ miningOperator   │          │ pesoNeto        │
+│ phone       │          │ registerUser_id  │          │ humedad         │
+│ municipe    │          │ deleted_at       │          │ lote            │
+│ status      │          └──────────────────┘          │ municipio       │
+│ registerUser│                                         │ medioTransporte │
+│ deleted_at  │          ┌──────────────────┐          │ origen / final  │
+└─────────────┘          │    signatures    │          │ matricula       │
+                         ├──────────────────┤          │ nombreConductor │
+┌─────────────┐          │ id (PK)          │          │ register_id     │
+│type_minerals│          │ name             │          │ deleted_at      │
+├─────────────┤   N..1   │ cargo            │          └─────────────────┘
+│ id (PK)     │◄────────►│ status           │
+│ name        │          │ deleted_at       │          ┌─────────────────┐
+│ deleted_at  │          └──────────────────┘          │      users      │
+└─────────────┘                                        ├─────────────────┤
+                         ┌──────────────────┐          │ id (PK)         │
+                         │      codes       │          │ name / email    │
+                         ├──────────────────┤          │ company_id (FK) │
+                         │ id (PK)          │          │ role_id (FK)    │
+                         │ code             │          │ password (bcrypt)│
+                         │ initials         │          │ deleted_at      │
+                         │ deleted_at       │          └─────────────────┘
+                         └──────────────────┘
+  </div>
+
+  <div class="page-footer">
+    <span>Sistema DDMEH — Documentación Técnica v1.0</span>
+    <span>GAD Beni — Dirección de Sistemas y Telecomunicaciones</span>
+    <span>Pág. 6</span>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════
+     PÁGINA 7 — SECCIÓN 6 CONT. (TABLAS BD)
+════════════════════════════════════════ -->
+<div class="page">
+  <div class="inst-header">
+    <div class="inst-titles">
+      <div class="gov-name">Gobierno Autónomo Departamental del Beni — Dir. de Sistemas y Telecomunicaciones</div>
+      <div class="doc-title">Sistema de Gestión Minera DDMEH — Documentación Técnica</div>
+    </div>
+  </div>
+
+  <div class="subsection-title">6.2 Tablas Principales</div>
+
+  <table class="doc-table">
+    <tr><th>Tabla</th><th>Modelo Laravel</th><th>Descripción</th><th>Campos clave</th></tr>
+    <tr><td><code>companies</code></td><td>Company</td><td>Padrón de empresas mineras</td><td>nit, nim, razon, activity, representative, ci, phone, municipe, status, registerUser_id</td></tr>
+    <tr><td><code>certificates</code></td><td>Certificate</td><td>Certificados COM emitidos</td><td>company_id, signature_id, code, dateStart, dateFinish, miningOperator, registerUser_id</td></tr>
+    <tr><td><code>form101s</code></td><td>Form101</td><td>Formularios DDMEH de extracción/transporte</td><td>certificate_id, typeMineral_id, code, pesoBruto, pesoNeto, medioTransporte, origen, final, matricula, register_id, deleted_id, delete_reason</td></tr>
+    <tr><td><code>signatures</code></td><td>Signature</td><td>Firmas de funcionarios autorizados</td><td>name, cargo, status</td></tr>
+    <tr><td><code>type_minerals</code></td><td>TypeMineral</td><td>Catálogo de tipos de mineral</td><td>name</td></tr>
+    <tr><td><code>codes</code></td><td>Code</td><td>Tabla auxiliar de lookup de códigos COM</td><td>code, initials</td></tr>
+    <tr><td><code>users</code></td><td>User (ext. Voyager)</td><td>Usuarios del sistema con rol y empresa</td><td>name, email, password, company_id, role_id, avatar</td></tr>
+  </table>
+
+  <div class="subsection-title">6.3 Vistas (Views), Stored Procedures, Triggers y Jobs</div>
+  <div class="info-box">
+    El sistema no utiliza Vistas SQL, Stored Procedures, Funciones ni Triggers en la base de datos. Toda la lógica de negocio se gestiona a nivel de aplicación mediante el ORM Eloquent de Laravel, garantizando portabilidad y mantenibilidad del código.
+  </div>
+
+  <div class="subsection-title">6.4 Índices Relevantes y Optimización de Consultas</div>
+  <ul class="doc-list">
+    <li>Todas las claves foráneas (<code>company_id</code>, <code>certificate_id</code>, <code>signature_id</code>, <code>typeMineral_id</code>, <code>register_id</code>, <code>registerUser_id</code>) tienen índices automáticos por InnoDB.</li>
+    <li>Las búsquedas AJAX utilizan <code>LIKE '%...%'</code> con <code>whereRaw</code> — se recomienda añadir índices <code>FULLTEXT</code> en columnas <code>razon</code>, <code>nit</code> y <code>code</code> para mayor rendimiento en producción con volúmenes altos.</li>
+    <li>Uso de <code>with(['company', 'signature', 'code'])</code> (Eager Loading) para evitar el problema N+1 en listados.</li>
+    <li>Paginación Bootstrap configurada en <code>AppServiceProvider::boot()</code>.</li>
+  </ul>
+
+  <div class="subsection-title">6.5 Política de Respaldo y Recuperación</div>
+  <ul class="doc-list">
+    <li><strong>Respaldo lógico:</strong> <code>mysqldump -u [user] -p [db_name] &gt; backup_YYYYMMDD.sql</code> — recomendado diariamente a las 02:00.</li>
+    <li><strong>Respaldo del storage:</strong> Directorio <code>storage/app/public/</code> con imágenes y archivos subidos.</li>
+    <li><strong>Retención:</strong> 30 días de respaldos diarios, 12 meses de respaldos mensuales.</li>
+    <li><strong>Restauración:</strong> <code>mysql -u [user] -p [db_name] &lt; backup_YYYYMMDD.sql</code></li>
+    <li><strong>Soft Deletes:</strong> Ningún registro es eliminado físicamente — los registros se pueden recuperar actualizando <code>deleted_at = NULL</code> directamente en DB o mediante Tinker.</li>
+  </ul>
+
+  <div class="page-footer">
+    <span>Sistema DDMEH — Documentación Técnica v1.0</span>
+    <span>GAD Beni — Dirección de Sistemas y Telecomunicaciones</span>
+    <span>Pág. 7</span>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════
+     PÁGINA 8 — SECCIONES 7 (APIs) Y 8 (SEGURIDAD)
+════════════════════════════════════════ -->
+<div class="page">
+  <div class="inst-header">
+    <div class="inst-titles">
+      <div class="gov-name">Gobierno Autónomo Departamental del Beni — Dir. de Sistemas y Telecomunicaciones</div>
+      <div class="doc-title">Sistema de Gestión Minera DDMEH — Documentación Técnica</div>
+    </div>
+  </div>
+
+  <div class="section-title">7. APIS E INTEGRACIONES</div>
+
+  <div class="subsection-title">7.1 APIs Internas (Endpoints AJAX)</div>
+  <table class="doc-table">
+    <tr><th>Método</th><th>Ruta</th><th>Descripción</th><th>Autenticación</th></tr>
+    <tr><td>GET</td><td><code>/admin/ajax/certificates/code/{code?}</code></td><td>Valida si un código COM ya existe en la base de datos. Devuelve JSON.</td><td>Sesión Voyager</td></tr>
+    <tr><td>GET</td><td><code>/admin/companies/certificate/list?q=</code></td><td>Búsqueda de empresas/certificados para selectores AJAX. Devuelve JSON.</td><td>Sesión Voyager</td></tr>
+    <tr><td>GET</td><td><code>/admin/form101s/ajax/list/{search?}</code></td><td>Listado paginado de Form101 con filtro de búsqueda. Devuelve HTML (vista parcial Blade).</td><td>Sesión Voyager</td></tr>
+    <tr><td>GET</td><td><code>/certificates/{id}/print</code></td><td>Impresión pública del COM (sin autenticación). Devuelve HTML para impresión.</td><td>Ninguna (pública)</td></tr>
+    <tr><td>GET</td><td><code>/admin/form101s/prinf/{form}</code></td><td>Impresión del Formulario DDMEH con QR. Devuelve HTML/PDF.</td><td>Sesión Voyager</td></tr>
+    <tr><td>GET</td><td><code>/admin/download/log/{cad?}</code></td><td>Descarga de logs del sistema.</td><td>Sesión Voyager</td></tr>
+  </table>
+
+  <div class="subsection-title">7.2 APIs Externas / Integraciones</div>
+  <table class="doc-table">
+    <tr><th>Sistema externo</th><th>Tipo</th><th>Descripción</th><th>Riesgo ante indisponibilidad</th></tr>
+    <tr>
+      <td>API WhatsApp GAD Beni</td>
+      <td>HTTP GET</td>
+      <td>Notificación automática al representante legal al registrar empresa o emitir COM. Endpoint: <code>https://whatsapp-api.beni.gob.bo/</code></td>
+      <td>Bajo — La operación principal no depende de la API; la notificación es opcional. El código de llamada está comentado en producción actual.</td>
+    </tr>
+  </table>
+
+  <div class="subsection-title">7.3 Formato de Intercambio de Datos</div>
+  <ul class="doc-list">
+    <li>APIs internas AJAX devuelven <strong>JSON</strong> (Content-Type: application/json) mediante <code>response()->json($data)</code>.</li>
+    <li>Vistas parciales (listado Form101) devuelven <strong>HTML renderizado</strong> por Blade.</li>
+    <li>Documentos de impresión devuelven <strong>HTML</strong> optimizado para impresión o <strong>PDF</strong> mediante DomPDF/HTML2PDF.</li>
+  </ul>
+
+  <!-- SECCIÓN 8 -->
+  <div class="section-title">8. SEGURIDAD</div>
+
+  <table class="doc-table">
+    <tr><th>Aspecto</th><th>Implementación</th></tr>
+    <tr><td>a) Mecanismo de autenticación</td><td>Autenticación por sesión web (Laravel + TCG Voyager). Laravel Sanctum ^2.11 para tokens API. Formulario de login estándar con protección CSRF.</td></tr>
+    <tr><td>b) Mecanismo de autorización</td><td>Middleware Voyager en todas las rutas <code>/admin/*</code>. Autorización por rol mediante <code>Auth::user()->role->name</code> en controladores.</td></tr>
+    <tr><td>c) Roles y perfiles</td><td><strong>admin:</strong> acceso completo. <strong>funcionario:</strong> solo su empresa. <strong>user:</strong> acceso básico de consulta. Gestionados por TCG Voyager.</td></tr>
+    <tr><td>d) Políticas de contraseñas</td><td>Contraseñas hasheadas con <code>bcrypt</code> mediante <code>Hash::make()</code> de Laravel. Sin política de expiración configurada (recomendado añadir).</td></tr>
+    <tr><td>e) Registro de auditoría</td><td>Campo <code>registerUser_id</code> en todas las entidades principales registra el usuario creador. Campo <code>deleted_id</code> y <code>delete_reason</code> en Form101 registran quién y por qué se eliminó.</td></tr>
+    <tr><td>f) Bitácoras del sistema</td><td>Laravel Log (canal <code>daily</code>) en <code>storage/logs/laravel.log</code>. Descarga disponible en <code>/admin/download/log/</code>.</td></tr>
+    <tr><td>g) Cifrado de datos</td><td>Contraseñas en bcrypt. Datos en tránsito cifrados por TLS/HTTPS. No se aplica cifrado adicional a campos de BD.</td></tr>
+    <tr><td>h) Protección contra ataques</td><td>Protección CSRF automática de Laravel en todos los formularios. Consultas mediante Eloquent ORM previenen SQL Injection. Salida Blade escapa XSS por defecto.</td></tr>
+    <tr><td>i) Gestión de sesiones</td><td>Sesiones gestionadas por Laravel (driver: file/database/redis configurable en <code>.env SESSION_DRIVER</code>). Timeout configurable en <code>config/session.php</code>.</td></tr>
+  </table>
+
+  <div class="page-footer">
+    <span>Sistema DDMEH — Documentación Técnica v1.0</span>
+    <span>GAD Beni — Dirección de Sistemas y Telecomunicaciones</span>
+    <span>Pág. 8</span>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════
+     PÁGINA 9 — SECCIONES 9, 10 Y 11
+════════════════════════════════════════ -->
+<div class="page">
+  <div class="inst-header">
+    <div class="inst-titles">
+      <div class="gov-name">Gobierno Autónomo Departamental del Beni — Dir. de Sistemas y Telecomunicaciones</div>
+      <div class="doc-title">Sistema de Gestión Minera DDMEH — Documentación Técnica</div>
+    </div>
+  </div>
+
+  <div class="section-title">9. METODOLOGÍA DE DESARROLLO</div>
+
+  <table class="doc-table">
+    <tr><th>Aspecto</th><th>Detalle</th></tr>
+    <tr><td>a) Metodología utilizada</td><td><strong>Híbrida</strong> — Ciclo iterativo-incremental adaptado al contexto de desarrollo institucional del GAD Beni, con entregas por módulo funcional.</td></tr>
+    <tr><td>b) Herramientas de gestión</td><td>Desarrollo gestionado por la Dirección de Sistemas y Telecomunicaciones del GAD Beni. Control de versiones con Git.</td></tr>
+    <tr><td>c) Frecuencia de despliegues</td><td>Despliegue manual en producción según requerimientos o correcciones aprobadas por la Dirección de Minería.</td></tr>
+    <tr><td>d) Gestión de incidencias</td><td>Reportes directos a la Dirección de Sistemas y Telecomunicaciones GAD Beni vía correo institucional.</td></tr>
+    <tr><td>e) Gestión de cambios</td><td>Cambios solicitados formalmente por la Dirección de Minería, aprobados por la Dirección de Sistemas. Registro mediante Instructivo interno.</td></tr>
+  </table>
+
+  <div class="section-title">10. GESTIÓN DEL CÓDIGO FUENTE</div>
+
+  <table class="doc-table">
+    <tr><th>Aspecto</th><th>Detalle</th></tr>
+    <tr><td>a) Ubicación del repositorio</td><td>Repositorio Git institucional / entregado como paquete comprimido a la Dirección de Sistemas GAD Beni.</td></tr>
+    <tr><td>b) Rama principal</td><td><code>master</code></td></tr>
+    <tr><td>c) Estrategia de versionado</td><td>Versión semántica (SemVer): MAJOR.MINOR.PATCH — Versión actual: 1.0.0</td></tr>
+    <tr><td>d) Procedimiento de despliegue</td><td>1. <code>git pull origin master</code> en servidor. 2. <code>composer install --no-dev --optimize-autoloader</code>. 3. <code>php artisan migrate --force</code>. 4. <code>php artisan optimize</code>. 5. <code>php artisan storage:link</code>. 6. Reiniciar servidor web.</td></tr>
+    <tr><td>e) Dependencias externas</td><td>Gestionadas por Composer (ver <code>composer.json</code>). Principales: Laravel 8, Voyager 1.6, DomPDF 2.0, QrCode 4.x, Guzzle 7.x.</td></tr>
+    <tr><td>f) Variables de entorno</td><td><code>APP_KEY</code>, <code>APP_ENV</code>, <code>APP_URL</code>, <code>DB_*</code> (host, database, username, password), <code>MAIL_*</code>, <code>SESSION_DRIVER</code>. Nunca versionar el archivo <code>.env</code>.</td></tr>
+    <tr><td>g) Procedimiento de compilación</td><td>Backend: <code>composer install</code>. Frontend assets: <code>npm install &amp;&amp; npm run production</code>.</td></tr>
+    <tr><td>h) Restauración del sistema</td><td>1. Restaurar BD desde backup: <code>mysql -u user -p db &lt; backup.sql</code>. 2. Restaurar <code>storage/</code> desde respaldo. 3. Configurar <code>.env</code>. 4. <code>php artisan key:generate</code>. 5. <code>php artisan storage:link</code>. 6. <code>php artisan optimize</code>.</td></tr>
+  </table>
+
+  <div class="section-title">11. MONITOREO Y OPERACIÓN</div>
+
+  <table class="doc-table">
+    <tr><th>Aspecto</th><th>Detalle</th></tr>
+    <tr><td>a) Herramientas de monitoreo</td><td>Laravel Log (canal daily). Endpoint <code>/admin/clear-cache</code> para limpieza de caché. Sin herramienta de monitoreo externo configurada actualmente.</td></tr>
+    <tr><td>b) Indicadores de rendimiento</td><td>Tiempo de respuesta de listados AJAX (objetivo &lt; 2s). Disponibilidad del servidor web (objetivo 99%).</td></tr>
+    <tr><td>c) Consumo de recursos</td><td>Aplicación PHP estándar. Consumo depende del volumen de registros PDF generados simultáneamente.</td></tr>
+    <tr><td>d) Capacidad estimada de usuarios</td><td>Diseñado para uso concurrente de 20-50 usuarios simultáneos. Escalar servidor según crecimiento.</td></tr>
+    <tr><td>e) Alertas configuradas</td><td>No se han configurado alertas automáticas. Recomendación: implementar monitoreo con UptimeRobot o similar.</td></tr>
+    <tr><td>f) Atención de incidentes</td><td>Contacto directo con la Dirección de Sistemas y Telecomunicaciones GAD Beni.</td></tr>
+    <tr><td>g) SLA</td><td>No existe SLA formal documentado. Se opera bajo disponibilidad horaria laboral con soporte de la Dirección de Sistemas.</td></tr>
+  </table>
+
+  <div class="page-footer">
+    <span>Sistema DDMEH — Documentación Técnica v1.0</span>
+    <span>GAD Beni — Dirección de Sistemas y Telecomunicaciones</span>
+    <span>Pág. 9</span>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════
+     PÁGINA 10 — SECCIÓN 12 (DEMO) + FIRMAS
+════════════════════════════════════════ -->
+<div class="page">
+  <div class="inst-header">
+    <div class="inst-titles">
+      <div class="gov-name">Gobierno Autónomo Departamental del Beni — Dir. de Sistemas y Telecomunicaciones</div>
+      <div class="doc-title">Sistema de Gestión Minera DDMEH — Documentación Técnica</div>
+    </div>
+  </div>
+
+  <div class="section-title">12. DEMOSTRACIÓN PRÁCTICA</div>
+  <p>Durante la presentación formal ante la Dirección de Sistemas y Telecomunicaciones, se realizará una demostración funcional que incluirá los siguientes procesos:</p>
+
+  <div class="subsection-title">a) Inicio de Sesión</div>
+  <ul class="doc-list">
+    <li>Acceso a <code>https://mineria.beni.gob.bo/admin</code> (redirigido desde <code>/</code>).</li>
+    <li>Login con credenciales de administrador — demostración del panel Voyager.</li>
+    <li>Login con credenciales de funcionario — verificación de restricción de datos por <code>company_id</code>.</li>
+  </ul>
+
+  <div class="subsection-title">b) Flujo Completo de Procesos Críticos</div>
+  <ol class="doc-list">
+    <li><strong>Registro de empresa:</strong> Nueva empresa → validación NIT único → creación de usuario vinculado automáticamente.</li>
+    <li><strong>Emisión de COM:</strong> Selección de empresa → firma funcionario → fechas vigencia → generación código COM-XXXXXX → visualización QR.</li>
+    <li><strong>Impresión pública de COM:</strong> Acceso a <code>/certificates/{id}/print</code> sin autenticación → verificación del QR embebido.</li>
+    <li><strong>Registro de Formulario DDMEH:</strong> Búsqueda AJAX de empresa → ingreso de datos de extracción/transporte → generación código DDMEH-XXXXXX.</li>
+    <li><strong>Impresión de Form101:</strong> Impresión del formulario con QR de trazabilidad completa.</li>
+  </ol>
+
+  <div class="subsection-title">c) Gestión de Usuarios</div>
+  <ul class="doc-list">
+    <li>Demostración del panel de usuarios Voyager — asignación de roles.</li>
+    <li>Visualización de campos de auditoría (<code>registerUser_id</code>, <code>deleted_at</code>).</li>
+  </ul>
+
+  <div class="subsection-title">d) Consultas Principales</div>
+  <ul class="doc-list">
+    <li>Búsqueda AJAX en listado de Form101 por: razón social, NIT, código COM, tipo de mineral.</li>
+    <li>Listado de certificados con información completa de empresa y firma.</li>
+  </ul>
+
+  <div class="subsection-title">e) Integraciones</div>
+  <ul class="doc-list">
+    <li>API WhatsApp institucional GAD Beni (demostración conceptual — integración desactivada en código actual).</li>
+    <li>Generación de código QR en documentos oficiales.</li>
+  </ul>
+
+  <div class="subsection-title">f) Procedimientos de Respaldo y Recuperación (conceptual)</div>
+  <ul class="doc-list">
+    <li>Demostración del procedimiento de respaldo con <code>mysqldump</code>.</li>
+    <li>Explicación del proceso de restauración desde backup.</li>
+    <li>Funcionamiento de Soft Deletes y recuperación de registros eliminados.</li>
+  </ul>
+
+  <!-- SECCIÓN 13: FIRMAS -->
+  <div class="section-title">13. FIRMAS Y ENTREGA FORMAL</div>
+  <p>En cumplimiento del Instructivo DIR.SIST.TEL. N°01/2026, se formaliza la transferencia de conocimientos e inducción del Sistema de Gestión Minera DDMEH a la Dirección de Sistemas y Telecomunicaciones del GAD Beni.</p>
+
+  <div class="info-box">
+    <strong>Fecha de presentación:</strong> 11 ó 12 de junio de 2026 — Instalaciones de la Dirección de Sistemas GAD Beni, a partir de las 09:00 a.m.<br/>
+    <strong>Entrega digital:</strong> Hasta el miércoles 10 de junio de 2026 a las 15:30 p.m. al correo sergio.coca@beni.gob.bo
+  </div>
+
+  <div style="margin-top: 30px;">
+    <div class="sign-block">
+      <div class="sign-col">
+        <br/><br/><br/>
+        <strong>Ing. Jessica Willy Mejia</strong>
+        Desarrolladora de Software<br/>
+        Dirección de Sistemas y Telecomunicaciones<br/>
+        GAD Beni
+      </div>
+      <div class="sign-col">
+        <br/><br/><br/>
+        <strong>Ing. Sergio Coca Martinez</strong>
+        Director de Sistemas y Telecomunicaciones<br/>
+        GAD Beni<br/>
+        Receptor de la inducción
+      </div>
+    </div>
+
+    <div class="sign-block" style="margin-top:30px;">
+      <div class="sign-col">
+        <br/><br/><br/>
+        <strong>Representante</strong>
+        Dirección de Minería, Energía e Hidrocarburos<br/>
+        GAD Beni<br/>
+        Unidad solicitante
+      </div>
+      <div class="sign-col">
+        <br/><br/><br/>
+        <strong>&nbsp;</strong>
+        Fecha de entrega formal:<br/>
+        _____ / _____ / 2026<br/>
+        Trinidad, Beni — Bolivia
+      </div>
+    </div>
+  </div>
+
+  <div class="warn-box" style="margin-top:24px;">
+    <strong>Nota:</strong> El presente documento constituye la documentación técnica oficial del Sistema de Gestión Minera DDMEH, elaborada en cumplimiento del Instructivo DIR.SIST.TEL. N°01/2026. Toda la información presentada es completa y actualizada a la fecha indicada en la portada.
+  </div>
+
+  <div class="page-footer">
+    <span>Sistema DDMEH — Documentación Técnica v1.0</span>
+    <span>GAD Beni — Dirección de Sistemas y Telecomunicaciones</span>
+    <span>Pág. 10</span>
+  </div>
+</div>
+
+</body>
+</html>
