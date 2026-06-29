@@ -71,7 +71,7 @@
         <tbody>
             <tr>
                 <td style="text-align: center; height:15px">{{$forms->code}}</td>
-                <td style="text-align: center; height:15px">{{$forms->certificate->code}}</td>
+                <td style="text-align: center; height:15px">{{$forms->certificate->company->codeMiningOperator}}</td>
                 <td style="text-align: center; height:15px">{{$forms->certificate->company->nim}}</td>
                 <td style="text-align: center; height:15px">{{$forms->certificate->company->nit}}</td>
             </tr>

@@ -114,7 +114,7 @@
                             <thead style="background:#2e7d32; color:white">
                                 <tr>
                                     <th>#</th>
-                                    <th>Código</th>
+                                    <th>Código de Formulario</th>
                                     <th>C.O.M.</th>
                                     <th>Empresa / Razón Social</th>
                                     <th>NIT</th>
@@ -138,7 +138,7 @@
                                 <tr @if($item->deleted_at) style="background:#fff3f3; color:#888" @endif>
                                     <td>{{ $i + 1 }}</td>
                                     <td><strong>{{ $item->code }}</strong></td>
-                                    <td>{{ $item->certificate?->code ?? '—' }}</td>
+                                    <td>{{ $item->certificate?->company?->codeMiningOperator ?? '—' }}</td>
                                     <td>{{ $item->certificate?->company?->razon ?? '—' }}</td>
                                     <td>{{ $item->certificate?->company?->nit ?? '—' }}</td>
                                     <td>{{ $item->typeMineral?->name ?? '—' }}</td>

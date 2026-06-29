@@ -100,7 +100,7 @@
         <thead>
             <tr>
                 <th style="width:3%">#</th>
-                <th style="width:10%">Código</th>
+                <th style="width:10%">Código de formulario</th>
                 <th style="width:9%">C.O.M.</th>
                 <th style="width:15%">Empresa / Razón Social</th>
                 <th style="width:7%">NIT</th>
@@ -124,7 +124,7 @@
             <tr class="{{ $item->deleted_at ? 'eliminado' : '' }}">
                 <td style="text-align:center">{{ $i + 1 }}</td>
                 <td style="text-align:center; font-weight:bold">{{ $item->code }}</td>
-                <td style="text-align:center">{{ $item->certificate?->code ?? '—' }}</td>
+                <td style="text-align:center">{{ $item->certificate?->company ?-> codeMiningOperator?? '—' }}</td>
                 <td>{{ $item->certificate?->company?->razon ?? '—' }}</td>
                 <td style="text-align:center">{{ $item->certificate?->company?->nit ?? '—' }}</td>
                 <td style="text-align:center">{{ $item->typeMineral?->name ?? '—' }}</td>

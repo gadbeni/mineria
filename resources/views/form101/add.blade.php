@@ -176,8 +176,8 @@
 
                                 <div class="row">
                                     <div class="form-group col-md-12">
-                                        <small class="panel-title">Observaciones <span style="color:red">*</span></small>
-                                        <textarea name="observation" id="observation" class="form-control" cols="30" rows="3" required></textarea>
+                                        <small class="panel-title">Observaciones</small>
+                                        <textarea name="observation" id="observation" class="form-control" cols="30" rows="3"></textarea>
 
                                     </div>
                                 </div>

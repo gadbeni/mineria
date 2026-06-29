@@ -76,7 +76,7 @@
             </tr>
             <tr>
                 <td class="label">C.O.M.</td>
-                <td>{{ $form->certificate->code }}</td>
+                <td>{{ $form->certificate->company->codeMiningOperator }}</td>
             </tr>
             <tr>
                 <td class="label">Fecha de Emisión</td>

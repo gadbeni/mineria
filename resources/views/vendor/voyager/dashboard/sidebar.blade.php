@@ -35,14 +35,17 @@
                 if (!auth()->user()->hasPermission('browse_reportsform101s')) {
                     $reportRoutes = ['reports.form101s', 'reports.certificates'];
                     $items = collect(json_decode($menuJson, true))->filter(function ($item) use ($reportRoutes) {
+                        // Quitar el padre "Reportes" por título
+                        if (isset($item['title']) && strtolower(trim($item['title'])) === 'reportes') {
+                            return false;
+                        }
+                        // Quitar ítems con ruta de reporte
                         if (!empty($item['route']) && in_array($item['route'], $reportRoutes)) {
                             return false;
                         }
-                        if (!empty($item['children'])) {
-                            $childRoutes = collect($item['children'])->pluck('route')->toArray();
-                            if (!empty($childRoutes) && count(array_diff($childRoutes, $reportRoutes)) === 0) {
-                                return false;
-                            }
+                        // Quitar ítems con URL de reporte
+                        if (!empty($item['url']) && strpos($item['url'], 'reports') !== false) {
+                            return false;
                         }
                         return true;
                     })->values();

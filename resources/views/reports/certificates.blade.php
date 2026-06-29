@@ -123,7 +123,7 @@
                                 @forelse($data as $i => $item)
                                 <tr @if($item->deleted_at) style="background:#fff3f3; color:#888" @endif>
                                     <td>{{ $i + 1 }}</td>
-                                    <td><strong>{{ $item->code }}</strong></td>
+                                    <td><strong>{{ $item->company->codeMiningOperator }}</strong></td>
                                     <td>{{ $item->company->razon }}</td>
                                     <td>{{ $item->company->nit }}</td>
                                     <td>{{ $item->company->nim }}</td>

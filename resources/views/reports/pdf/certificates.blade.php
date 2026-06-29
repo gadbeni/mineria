@@ -112,7 +112,7 @@
             @forelse($data as $i => $item)
             <tr class="{{ $item->deleted_at ? 'eliminado' : '' }}">
                 <td style="text-align:center">{{ $i + 1 }}</td>
-                <td style="text-align:center; font-weight:bold">{{ $item->code }}</td>
+                <td style="text-align:center; font-weight:bold">{{ $item->company->codeMiningOperator }}</td>
                 <td>{{ $item->company->razon }}</td>
                 <td style="text-align:center">{{ $item->company->nit }}</td>
                 <td style="text-align:center">{{ $item->company->nim }}</td>

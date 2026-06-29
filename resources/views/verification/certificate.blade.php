@@ -58,7 +58,7 @@
 
     <div class="com-code">
         <div class="label">Código Operador Minero</div>
-        <div class="code">{{ $certificate->code }}</div>
+        <div class="code">{{ $certificate->company->codeMiningOperator }}</div>
     </div>
 
     <div class="section">
