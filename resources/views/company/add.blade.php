@@ -144,27 +144,26 @@
                     }
                 });
 
-                function previewCode() {
+                var previewTimer = null;
+
+                function fetchPreviewCode() {
                     var razon = $('#razon').val().trim();
                     var nit   = $('#nit').val().replace(/\D/g, '');
 
-                    if (!razon && !nit) {
-                        $('#codeMiningOperator').val('');
-                        return;
-                    }
-
-                    // Siglas: primera letra de cada palabra
-                    var initials = razon.split(/\s+/).filter(Boolean)
-                        .map(function(w){ return w[0].toUpperCase(); }).join('');
-
-                    // Primeros 3 dígitos del NIT
-                    var nitPrefix = nit.substring(0, 3).padEnd(3, '0');
-
-                    var preview = initials + (nitPrefix ? '-' + nitPrefix : '') + '###';
-                    $('#codeMiningOperator').val(preview);
+                    $.get('{{ route("companies.ajax.next-code") }}', { razon: razon, nit: nit })
+                        .done(function(res) {
+                            $('#codeMiningOperator').val(res.code);
+                        });
                 }
 
-                $('#razon, #nit').on('input', previewCode);
+                // Carga el próximo código al abrir el formulario
+                fetchPreviewCode();
+
+                // Actualiza el prefijo (iniciales + NIT) conforme el usuario escribe
+                $('#razon, #nit').on('input', function() {
+                    clearTimeout(previewTimer);
+                    previewTimer = setTimeout(fetchPreviewCode, 300);
+                });
             });
         </script>
     @stop

@@ -14,7 +14,18 @@
     @stop
 
     @section('content')
-        <div class="page-content edit-add container-fluid">    
+        <div class="page-content edit-add container-fluid">
+
+            @if ($errors->any())
+                <div class="alert alert-danger">
+                    <ul class="mb-0">
+                        @foreach ($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                </div>
+            @endif
+
             <form id="agent" action="{{route('form101s.store')}}" method="POST">
                 @csrf
                 <div class="row">
@@ -228,32 +239,31 @@
                         }
                     },
                     quietMillis: 250,
-                    minimumInputLength: 2,
+                    minimumInputLength: 0,
                     ajax: {
-                        url: "{{ url('admin/companies/certificate/list') }}",        
+                        url: "{{ url('admin/companies/certificate/list') }}",
+                        data: function(params) {
+                            return { term: params.term || '' };
+                        },
                         processResults: function (data) {
                             let results = [];
-                            data.map(data =>{
-                                results.push({
-                                    ...data,
-                                    disabled: false
-                                });
+                            data.map(function(item){
+                                if (item && item.company) {
+                                    results.push({ ...item, disabled: false });
+                                }
                             });
-                            return {
-                                results
-                            };
+                            return { results };
                         },
-                        cache: true
+                        cache: false
                     },
                     templateResult: formatResultCustomers_people,
                     templateSelection: (opt) => {
                         productSelected = opt;
-                        // alert(opt)
-                        
-                        return opt.id?'<small style="font-size: 15px">'+opt.code+'</small>, <small>Nit: </small>'+opt.company.nit+'<small>, Razon Social: </small>'+opt.company.razon+'<small>, Representante: </small>'+opt.company.representative+'<small>, Actividad Social: </small>'+opt.company.activity:'<i class="fa fa-search"></i> Buscar... ';
+                        if (!opt.id || !opt.company) return '<i class="fa fa-search"></i> Buscar...';
+                        return '<small style="font-size: 15px">'+opt.code+'</small>, <small>Nit: </small>'+opt.company.nit+'<small>, Razon Social: </small>'+opt.company.razon+'<small>, Representante: </small>'+opt.company.representative+'<small>, Actividad Social: </small>'+opt.company.activity;
                     }
                 }).change(function(){
-                
+
                 });
             })
 
@@ -261,10 +271,9 @@
                 if (option.loading) {
                     return '<span class="text-center"><i class="fas fa-spinner fa-spin"></i> Buscando...</span>';
                 }
-       
-                
-                // Mostrar las opciones encontradas
-                return $(`  <div style="display: flex">
+                if (!option.company) return option.code || '';
+
+                return $(`<div style="display: flex">
                                 <div>
                                     <small style="font-size: 15px">${option.code}</small><br>
                                     <small>Nit: </small><b style="font-size: 15px; color: black">${option.company.nit}</b><br>

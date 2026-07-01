@@ -121,6 +121,31 @@
             margin: 20px;
             padding: 20px;
         }
+        @media print {
+            html, body { height: 100%; margin: 0; }
+            .background { background: none !important; height: 100%; }
+            .sheet { height: 100%; padding: 0 !important; margin: 0 !important; }
+            .content { height: 100%; padding: 0 !important; }
+
+            #html2pdf {
+                margin: 0 !important;
+                padding: 12px 20px !important;
+                border-width: 5px !important;
+                height: calc(8.5in - 20mm - 10px);
+                display: flex;
+                flex-direction: column;
+                justify-content: space-between;
+                box-sizing: border-box;
+            }
+            #html2pdf > table { flex: 0 0 auto; width: 100%; }
+            br { display: none !important; }
+
+            /* Fuentes ajustadas para llenar carta horizontal */
+            #html2pdf table:nth-of-type(2) h1 { font-size: 80px !important; margin: 0 !important; }
+            #html2pdf table:nth-of-type(3) h1 { font-size: 22px !important; margin: 0 !important; }
+            #html2pdf table:nth-of-type(4) h1 { font-size: 55px !important; margin: 0 !important; }
+            #html2pdf table:nth-of-type(5) h1 { font-size: 36px !important; margin: 0 !important; }
+        }
     </style>
 @stop
 

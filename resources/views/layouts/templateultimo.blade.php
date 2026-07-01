@@ -93,15 +93,11 @@
 
             @page {
                 size: letter portrait;
-                margin: 10mm 10mm 10mm 10mm;
+                margin: 10mm;
             }
             @media print {
-                .options {
-                    display: none !important;
-                }
-                body {
-                    margin: 0;
-                }
+                .options { display: none !important; }
+                body { margin: 0; zoom: 0.9; }
                 .sheet {
                     padding: 0;
                     width: 100%;
@@ -114,13 +110,8 @@
                     width: 100%;
                     background: none !important;
                 }
-                #watermark {
-                    position: fixed;
-                    top: 40%;
-                }
-                .table-signature {
-                    margin-bottom: 0px;
-                }
+                #watermark { position: fixed; top: 40%; }
+                .table-signature { margin-bottom: 0; }
             }
         </style>
     </head>

@@ -23,7 +23,7 @@
         </button>
     </div>
 @endif
-<div >
+<div id="form-wrapper">
     <table width="100%">
         <tr>
             <td style="width: 15%"><img src="{{ asset('images/icon.png') }}" alt="" width="70px"></td>
@@ -182,42 +182,47 @@
     <tr>
         <small style="text-align: center; height:25px; width: 100%"><strong> PUNTOS DE CONTROL </strong></small>
     </tr>
+    <div id="puntos-control">
     <table style="width: 100%; font-size: 10px" border="1" class="print-friendly" cellspacing="0" cellpadding="2">
         <thead>
             <tr>
-                <th style="text-align: center;width: 25%; height:55px"></th>
-                <th style="text-align: center;width: 25%; height:55px"></th>
-                <th style="text-align: center;width: 25%; height:55px"></th>
-                <th style="text-align: center;width: 25%; height:55px"></th>
+                <th style="text-align: center;width: 25%; height:30px"></th>
+                <th style="text-align: center;width: 25%; height:30px"></th>
+                <th style="text-align: center;width: 25%; height:30px"></th>
+                <th style="text-align: center;width: 25%; height:30px"></th>
             </tr>
         </thead>
     </table>
     <table style="width: 100%; font-size: 10px" border="1" class="print-friendly" cellspacing="0" cellpadding="2">
         <thead>
             <tr>
-                <th style="text-align: center;width: 25%; height:50px"></th>
-                <th style="text-align: center;width: 25%; height:50px"></th>
-                <th rowspan="2" style="text-align: center;width: 25%">
-                    <b style="width: 20%"><img src="{{ asset('images/firma.png') }}" alt="" width="130px"></b><br>
-                    <span style="font-size:9px; text-transform:uppercase">
+                <th style="text-align: center;width: 25%; height:30px"></th>
+                <th style="text-align: center;width: 25%; height:30px"></th>
+                <th rowspan="2" style="text-align: center; width: 25%; vertical-align: middle;">
+                    @if(!empty($forms->signature->image))
+                        <img src="{{ Voyager::image($forms->signature->image) }}" alt="firma" style="display:block; margin:0 auto; width:130px; max-width:100%; height:auto;">
+                    @else
+                       {{-- <img src="{{ asset('images/firma.png') }}" alt="firma" style="display:block; margin:0 auto; width:130px; max-width:100%; height:auto;">--}}
+                    @endif
+                    <span style="display:block; font-size:9px; text-transform:uppercase; margin-top:2px;">
                         {{ $forms->signature->alias ?? '' }}
                         {{ $forms->signature->first_name ?? '' }}
                         {{ $forms->signature->last_name ?? '' }}
-                    </span><br>
-                    <span style="font-size:8px; font-weight:normal">{{ $forms->signature->job ?? 'RESPONSABLE DDMEH' }}</span>
+                    </span>
+                    <span style="display:block; font-size:8px; font-weight:normal;">{{ $forms->signature->job ?? 'RESPONSABLE DDMEH' }}</span>
                 </th>
-                <th rowspan="2" style="text-align: center;width: 25%; height:30px">
-                    <b style="width: 15%"><img src="{{ asset('images/sello.png') }}" alt="" width="70px"></b>
-                    <br>
+                <th rowspan="2" style="text-align: center;width: 25%; height:30px; vertical-align: middle;">
+                    <img src="{{ asset('images/sello.png') }}" alt="" style="display:block; margin:0 auto; width:70px; height:auto;">
                     <b style="color: rgb(160, 148, 148)">SELLO DE LA <br>D.D.M.E.H.</b>
                 </th>
             </tr>
             <tr>
-                <th style="text-align: center; height:18px">SELLO DE LA EMPRESA</th>
-                <th style="text-align: center; height:18px">FIRMA DEL RPTE. LEGAL</th>
+                <th style="text-align: center; height:15px">SELLO DE LA EMPRESA</th>
+                <th style="text-align: center; height:15px">FIRMA DEL RPTE. LEGAL</th>
             </tr>
         </thead>
     </table>
+    </div>
 
     <table style="width: 100%; font-size: 10px" border="1" class="print-friendly" cellspacing="0" cellpadding="2">
         <thead>
@@ -259,7 +264,21 @@
             page-break-inside: avoid;
         }
         @media print {
+            html, body { height: 100%; margin: 0; }
+            body { zoom: 1 !important; }
+            .container { display: block !important; width: 100% !important; background: none !important; height: 100%; }
+            .sheet {
+                padding: 0 !important; width: 100% !important; max-width: 100% !important;
+                box-shadow: none !important; background: white; height: 100%;
+                display: flex; flex-direction: column;
+            }
             .no-print { display: none !important; }
+            br { display: none !important; }
+            table { margin: 0 !important; }
+            small[style*="height:25px"] { line-height: 1.2 !important; }
+            #form-wrapper { flex: 1; display: flex; flex-direction: column; }
+            #puntos-control { flex: 1; display: flex; flex-direction: column; }
+            #puntos-control > table:first-child { flex: 1; }
         }
         @if($isPreview)
         .options { display: none !important; }

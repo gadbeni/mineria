@@ -44,14 +44,22 @@ class CompanyController extends Controller
         $digits = preg_replace('/\D/', '', $nit);
         $nitPrefix = str_pad(substr($digits, 0, 3), 3, '0', STR_PAD_RIGHT);
 
-        $prefix = $initials . '-' . $nitPrefix;
+        // Correlativo: toma el último código registrado y suma 1 a los 3 últimos dígitos
+        $lastCode = Company::whereNotNull('codeMiningOperator')
+            ->orderBy('id', 'desc')
+            ->value('codeMiningOperator');
 
-        // Correlativo: cuenta todas las empresas con el mismo prefijo (incluyendo borradas)
-        $count = Company::withTrashed()
-            ->where('codeMiningOperator', 'like', $prefix . '%')
-            ->count();
+        $nextNum = $lastCode ? ((int) substr($lastCode, -3)) + 1 : 20;
 
-        return $prefix . str_pad($count, 3, '0', STR_PAD_LEFT);
+        return $initials . '-' . $nitPrefix . str_pad($nextNum, 3, '0', STR_PAD_LEFT);
+    }
+
+    public function nextCode(Request $request)
+    {
+        $razon = $request->get('razon', '');
+        $nit   = $request->get('nit', '');
+        $code  = $this->generateCodeMiningOperator($razon, $nit);
+        return response()->json(['code' => $code]);
     }
 
     public function store(Request $request)
@@ -133,22 +141,25 @@ class CompanyController extends Controller
 
     public function ajaxCompany()
     {
-        $q = request('q');
+        $q         = request('term') ?? request('q');
+        $companyId = Auth::user()->company_id;
+
         $data = Certificate::with(['company'])
-            ->where(function($query) use ($q){
-                if($q){
-                    $query->OrwhereHas('company', function($query) use($q){
+            ->whereHas('company', function($query) {
+                $query->whereNull('deleted_at');
+            })
+            ->when($companyId, function($query) use ($companyId) {
+                $query->where('company_id', $companyId);
+            })
+            ->where(function($query) use ($q) {
+                if ($q) {
+                    $query->whereHas('company', function($query) use ($q) {
                         $query->whereRaw("(razon like '%$q%' or representative like '%$q%' or nit like '%$q%' or activity like '%$q%')");
                     })
-                    ->OrWhereRaw($q ? "code like '%$q%'" : 1);
+                    ->orWhereRaw("code like '%$q%'");
                 }
             })
             ->where('deleted_at', NULL)->get();
-
-
-
-        // $data = Company::whereRaw($q ? '(nit like "%'.$q.'%" or activity like "%'.$q.'%" or representative like "%'.$q.'%" or razon like "%'.$q.'%" )' : 1)
-        // ->where('deleted_at', null)->get();
 
         return response()->json($data);
     }

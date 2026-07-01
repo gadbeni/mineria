@@ -54,18 +54,16 @@
             position: relative;
             width: 350px;
         }
-        @media print{
-            .hide-print{
-                display: none
-            }
-            .content{
-                padding: 0px 0px
-            }
-            .sheet {
-                width: 100%;
-                margin: 0px;
-                padding: 0px;
-            }
+        @page {
+            size: letter landscape;
+            margin: 10mm;
+        }
+        @media print {
+            .hide-print { display: none !important; }
+            .content { padding: 0 !important; }
+            .background { background: none !important; width: 100%; }
+            .sheet { width: 100%; margin: 0; padding: 0; }
+            body { margin: 0; }
         }
     </style>
     @yield('css')

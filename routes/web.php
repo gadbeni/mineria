@@ -42,6 +42,7 @@ Route::group(['prefix' => 'admin'], function () {
     Route::post('companies/{id}/toggle-status', [CompanyController::class, 'toggleStatus'])->name('companies.toggle-status');
     // Route::resource('companies', CompanyController::class);
     Route::get('companies/ajax/list/{search?}', [CompanyController::class, 'list'])->name('companies.ajax.list');
+    Route::get('companies/ajax/next-code', [CompanyController::class, 'nextCode'])->name('companies.ajax.next-code');
     Route::get('companies/certificate/list', [CompanyController::class, 'ajaxCompany']);//para obtener las personas o clientes para darles u prestamos
 
 

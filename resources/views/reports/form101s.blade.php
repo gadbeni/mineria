@@ -194,3 +194,18 @@
     </div>
 </div>
 @stop
+
+@section('css')
+<style>
+@media print {
+    @page { size: letter landscape; margin: 10mm; }
+    .sidebar, .navbar, .page-header, .btn, .btn-group,
+    .panel-heading, form { display: none !important; }
+    .page-content { padding: 0 !important; margin: 0 !important; }
+    .panel { border: none !important; box-shadow: none !important; }
+    .panel-body { padding: 0 !important; }
+    .table { font-size: 8px !important; }
+    .label { border: 1px solid #ccc !important; color: #000 !important; background: none !important; }
+}
+</style>
+@stop

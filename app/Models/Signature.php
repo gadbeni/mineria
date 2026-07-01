@@ -16,6 +16,7 @@ class Signature extends Model
         'first_name',
         'last_name',
         'job',
+        'image',
         'status',
         'baja_reason',
         'registerUser_id',

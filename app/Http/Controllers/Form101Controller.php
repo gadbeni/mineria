@@ -99,7 +99,7 @@ class Form101Controller extends Controller
             'licenciaConducir'          => 'required|string|max:50',
             'nombreEncargadoTrasporte'  => 'required|string|max:150',
             'ciEncargadoTrasporte'      => 'required|string|max:50',
-            'observation'               => 'required|string|max:500',
+            'observation'               => 'nullable|string|max:500',
         ], [
             'certificate_id.required'           => 'Seleccione una empresa / C.O.M.',
             'typeMineral_id.required'           => 'Seleccione el tipo de mineral.',
@@ -166,8 +166,7 @@ class Form101Controller extends Controller
             return redirect()->route('form101s.index')->with(['message' => 'Registrado exitosamente exitosamente.', 'alert-type' => 'success']);            
         } catch (\Throwable $th) {
             DB::rollBack();
-            return 0;
-            return redirect()->route('form101s.index')->with(['message' => 'Ocurrió un error.', 'alert-type' => 'error']);
+            return redirect()->back()->with(['message' => 'Ocurrió un error: ' . $th->getMessage(), 'alert-type' => 'error']);
         }
     }
 
