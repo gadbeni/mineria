@@ -105,6 +105,7 @@
                 <th style="width:15%">Empresa / Razón Social</th>
                 <th style="width:7%">NIT</th>
                 <th style="width:9%">Tipo Mineral</th>
+                <th style="width:4%">U.M.</th>
                 <th style="width:6%">Peso Bruto</th>
                 <th style="width:6%">Peso Neto</th>
                 <th style="width:8%">Municipio</th>
@@ -114,6 +115,7 @@
                 <th style="width:6%">Est. Form.</th>
                 <th style="width:6%">Est. C.O.M.</th>
                 <th style="width:7%">Fecha Creación</th>
+                <th style="width:8%">Registrado por</th>
                 @if(!empty($incluyeEliminados))
                 <th style="width:6%">Eliminado</th>
                 @endif
@@ -128,6 +130,7 @@
                 <td>{{ $item->certificate?->company?->razon ?? '—' }}</td>
                 <td style="text-align:center">{{ $item->certificate?->company?->nit ?? '—' }}</td>
                 <td style="text-align:center">{{ $item->typeMineral?->name ?? '—' }}</td>
+                <td style="text-align:center">{{ $item->unidaddemedida1 ?? '—' }}</td>
                 <td style="text-align:right">{{ $item->pesoBruto }}</td>
                 <td style="text-align:right">{{ $item->pesoNeto }}</td>
                 <td>{{ $item->municipio }}</td>
@@ -135,10 +138,12 @@
                 <td>{{ $item->origen }}</td>
                 <td>{{ $item->final }}</td>
                 <td style="text-align:center">
-                    @if($item->confirmado)
+                    @if($item->status == 'Confirmado')
                         <span class="confirmado">CONFIRMADO</span>
-                    @else
+                    @elseif($item->status == 'Pendiente')
                         <span class="pendiente">PENDIENTE</span>
+                    @else
+                        <span class="pendiente">{{ strtoupper($item->status ?? '—') }}</span>
                     @endif
                 </td>
                 <td style="text-align:center">
@@ -151,6 +156,7 @@
                     @endif
                 </td>
                 <td style="text-align:center">{{ \Carbon\Carbon::parse($item->created_at)->format('d/m/Y H:i') }}</td>
+                <td>{{ optional($item->registeredBy)->name ?? '—' }}</td>
                 @if(!empty($incluyeEliminados))
                 <td style="text-align:center">
                     @if($item->deleted_at)
@@ -163,10 +169,27 @@
             </tr>
             @empty
             <tr>
-                <td colspan="{{ !empty($incluyeEliminados) ? 16 : 15 }}" style="text-align:center; padding:8px">Sin registros</td>
+                <td colspan="{{ !empty($incluyeEliminados) ? 18 : 17 }}" style="text-align:center; padding:8px">Sin registros</td>
             </tr>
             @endforelse
         </tbody>
+        <tfoot>
+            <tr style="background:#eef5ee; font-weight:bold">
+                <td colspan="8" style="text-align:right">Subtotal Peso Neto (Kg):</td>
+                <td style="text-align:right">{{ number_format($totalPesoNetoKg ?? 0, 2) }}</td>
+                <td colspan="{{ !empty($incluyeEliminados) ? 9 : 8 }}">Kg</td>
+            </tr>
+            <tr style="background:#eef5ee; font-weight:bold">
+                <td colspan="8" style="text-align:right">Subtotal Peso Neto (Gr):</td>
+                <td style="text-align:right">{{ number_format($totalPesoNetoGr ?? 0, 2) }}</td>
+                <td colspan="{{ !empty($incluyeEliminados) ? 9 : 8 }}">Gr</td>
+            </tr>
+            <tr style="background:#e3eefc; font-weight:bold">
+                <td colspan="8" style="text-align:right">Total general (Gr→Kg + Kg):</td>
+                <td style="text-align:right">{{ number_format($totalGeneralKg ?? 0, 2) }}</td>
+                <td colspan="{{ !empty($incluyeEliminados) ? 9 : 8 }}">Kg</td>
+            </tr>
+        </tfoot>
     </table>
 
     <div class="footer">

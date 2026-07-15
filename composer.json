@@ -13,6 +13,7 @@
         "laravel/sanctum": "^2.11",
         "laravel/tinker": "^2.5",
         "orangehill/iseed": "^3.0",
+        "phpoffice/phpspreadsheet": "^5.9",
         "simplesoftwareio/simple-qrcode": "~4",
         "spipu/html2pdf": "^5.2",
         "tcg/voyager": "^1.6"

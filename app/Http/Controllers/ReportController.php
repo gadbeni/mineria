@@ -8,6 +8,11 @@ use App\Models\Form101;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Barryvdh\DomPDF\Facade\Pdf;
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
+use PhpOffice\PhpSpreadsheet\Style\Fill;
+use PhpOffice\PhpSpreadsheet\Style\Alignment;
+use PhpOffice\PhpSpreadsheet\Cell\DataType;
 
 class ReportController extends Controller
 {
@@ -24,8 +29,8 @@ class ReportController extends Controller
         $incluyeEliminados = $request->filled('incluir_eliminados');
 
         $query = $incluyeEliminados
-            ? Form101::withTrashed()->with(['certificate.company', 'typeMineral'])
-            : Form101::with(['certificate.company', 'typeMineral'])->whereNull('deleted_at');
+            ? Form101::withTrashed()->with(['certificate.company', 'typeMineral', 'registeredBy'])
+            : Form101::with(['certificate.company', 'typeMineral', 'registeredBy'])->whereNull('deleted_at');
 
         if ($request->filled('desde')) {
             $query->whereDate('created_at', '>=', $request->desde);
@@ -37,9 +42,11 @@ class ReportController extends Controller
 
         if ($request->filled('estado')) {
             if ($request->estado === 'confirmado') {
-                $query->where('confirmado', 1);
+                $query->where('status', 'Confirmado');
             } elseif ($request->estado === 'pendiente') {
-                $query->where('confirmado', 0);
+                $query->where('status', 'Pendiente');
+            } elseif ($request->estado === 'borrador') {
+                $query->where('status', 'Borrador');
             }
         }
 
@@ -62,6 +69,11 @@ class ReportController extends Controller
         }
 
         $data              = $query->orderBy('id', 'DESC')->get();
+        // Subtotales de Peso Neto por unidad de medida
+        $totalPesoNetoKg   = $data->where('unidaddemedida1', 'Kg')->sum('pesoNeto');
+        $totalPesoNetoGr   = $data->where('unidaddemedida1', 'Gr')->sum('pesoNeto');
+        // Total general en Kg (gramos convertidos a Kg + kilogramos)
+        $totalGeneralKg    = $totalPesoNetoKg + ($totalPesoNetoGr / 1000);
         $desde             = $request->desde;
         $hasta             = $request->hasta;
         $estado            = $request->estado;
@@ -75,7 +87,7 @@ class ReportController extends Controller
         if ($request->has('pdf') || $request->has('preview')) {
             $empresaNombre = $empresaId ? Company::find($empresaId)?->razon : null;
             $pdf = Pdf::loadView('reports.pdf.form101s',
-                        compact('data', 'desde', 'hasta', 'estado', 'incluyeEliminados', 'empresaNombre', 'origen', 'destinoFinal'))
+                        compact('data', 'desde', 'hasta', 'estado', 'incluyeEliminados', 'empresaNombre', 'origen', 'destinoFinal', 'totalPesoNetoKg', 'totalPesoNetoGr', 'totalGeneralKg'))
                 ->setPaper('letter', 'landscape');
 
             return $request->has('preview')
@@ -83,8 +95,114 @@ class ReportController extends Controller
                 : $pdf->download('Reporte-Formularios101.pdf');
         }
 
+        if ($request->has('excel')) {
+            $empresaNombre = $empresaId ? Company::find($empresaId)?->razon : null;
+            return $this->form101sExcel($data, $incluyeEliminados, $totalPesoNetoKg, $totalPesoNetoGr, $totalGeneralKg);
+        }
+
+        $subtotalUm = $request->subtotal_um; // '', 'kg', 'gr', 'total'
+
         return view('reports.form101s',
-            compact('data', 'desde', 'hasta', 'estado', 'incluyeEliminados', 'companies', 'empresaId', 'origen', 'destinoFinal', 'origenes', 'destinos'));
+            compact('data', 'desde', 'hasta', 'estado', 'incluyeEliminados', 'companies', 'empresaId', 'origen', 'destinoFinal', 'origenes', 'destinos', 'totalPesoNetoKg', 'totalPesoNetoGr', 'subtotalUm', 'totalGeneralKg'));
+    }
+
+    /**
+     * Genera y descarga el reporte de Formularios 101 en formato XLSX real (PhpSpreadsheet).
+     */
+    private function form101sExcel($data, $incluyeEliminados, $totalPesoNetoKg = 0, $totalPesoNetoGr = 0, $totalGeneralKg = 0)
+    {
+        $spreadsheet = new Spreadsheet();
+        $sheet = $spreadsheet->getActiveSheet();
+        $sheet->setTitle('Formularios 101');
+
+        $headers = [
+            '#', 'Código de Formulario', 'C.O.M.', 'Empresa / Razón Social', 'NIT',
+            'Tipo Mineral', 'U.M.', 'Peso Bruto', 'Peso Neto', 'Municipio', 'Localidad',
+            'Origen', 'Destino Final', 'Est. Formulario', 'Est. C.O.M.', 'Fecha Creación', 'Registrado por',
+        ];
+        if ($incluyeEliminados) {
+            $headers[] = 'Eliminado';
+        }
+
+        // Encabezados
+        $col = 1;
+        foreach ($headers as $h) {
+            $sheet->setCellValue([$col, 1], $h);
+            $col++;
+        }
+        $lastColLetter = \PhpOffice\PhpSpreadsheet\Cell\Coordinate::stringFromColumnIndex(count($headers));
+        $headerStyle = $sheet->getStyle('A1:' . $lastColLetter . '1');
+        $headerStyle->getFont()->setBold(true)->getColor()->setARGB('FFFFFFFF');
+        $headerStyle->getFill()->setFillType(Fill::FILL_SOLID)->getStartColor()->setARGB('FF2E7D32');
+        $headerStyle->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
+
+        // Filas
+        $row = 2;
+        foreach ($data as $i => $item) {
+            $estadoForm = $item->status ?? '—';
+
+            $comActivo = '—';
+            if ($item->certificate && $item->certificate->dateFinish) {
+                $comActivo = \Carbon\Carbon::parse($item->certificate->dateFinish)->gte(\Carbon\Carbon::today()) ? 'Activo' : 'Inactivo';
+            }
+
+            $c = 1;
+            $sheet->setCellValue([$c++, $row], $i + 1);
+            $sheet->setCellValue([$c++, $row], $item->code);
+            $sheet->setCellValue([$c++, $row], optional(optional($item->certificate)->company)->codeMiningOperator ?? '—');
+            $sheet->setCellValue([$c++, $row], optional(optional($item->certificate)->company)->razon ?? '—');
+            // NIT como texto (evita notación científica)
+            $sheet->setCellValueExplicit([$c++, $row], (string) (optional(optional($item->certificate)->company)->nit ?? '—'), DataType::TYPE_STRING);
+            $sheet->setCellValue([$c++, $row], optional($item->typeMineral)->name ?? '—');
+            $sheet->setCellValue([$c++, $row], $item->unidaddemedida1 ?? '—');
+            $sheet->setCellValue([$c++, $row], (float) $item->pesoBruto);
+            $sheet->setCellValue([$c++, $row], (float) $item->pesoNeto);
+            $sheet->setCellValue([$c++, $row], $item->municipio);
+            $sheet->setCellValue([$c++, $row], $item->localidad);
+            $sheet->setCellValue([$c++, $row], $item->origen);
+            $sheet->setCellValue([$c++, $row], $item->final);
+            $sheet->setCellValue([$c++, $row], $estadoForm);
+            $sheet->setCellValue([$c++, $row], $comActivo);
+            $sheet->setCellValue([$c++, $row], \Carbon\Carbon::parse($item->created_at)->format('d/m/Y H:i'));
+            $sheet->setCellValue([$c++, $row], optional($item->registeredBy)->name ?? '—');
+            if ($incluyeEliminados) {
+                $sheet->setCellValue([$c++, $row], $item->deleted_at ? \Carbon\Carbon::parse($item->deleted_at)->format('d/m/Y') : '');
+            }
+            $row++;
+        }
+
+        // Filas de subtotales y total general al final
+        $lastCol = count($headers);
+        $row++; // fila en blanco
+
+        $resumen = [
+            ['Subtotal Peso Neto (Kg):', number_format($totalPesoNetoKg, 2) . ' Kg'],
+            ['Subtotal Peso Neto (Gr):', number_format($totalPesoNetoGr, 2) . ' Gr'],
+            ['Total general (Gr→Kg + Kg):', number_format($totalGeneralKg, 2) . ' Kg'],
+        ];
+        foreach ($resumen as $r) {
+            $sheet->setCellValue([1, $row], $r[0]);
+            $sheet->mergeCells('A' . $row . ':F' . $row);
+            $sheet->setCellValue([7, $row], $r[1]);
+            $sheet->getStyle('A' . $row)->getFont()->setBold(true);
+            $sheet->getStyle('G' . $row)->getFont()->setBold(true);
+            $row++;
+        }
+
+        // Autoajuste de ancho
+        for ($col = 1; $col <= count($headers); $col++) {
+            $sheet->getColumnDimensionByColumn($col)->setAutoSize(true);
+        }
+        $sheet->freezePane('A2');
+
+        $filename = 'Reporte-Formularios101-' . now()->format('Ymd_His') . '.xlsx';
+
+        return response()->streamDownload(function () use ($spreadsheet) {
+            $writer = new Xlsx($spreadsheet);
+            $writer->save('php://output');
+        }, $filename, [
+            'Content-Type' => 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+        ]);
     }
 
     /**

@@ -54,6 +54,10 @@ Route::group(['prefix' => 'admin'], function () {
     Route::get('form101s/prinf/{form?}', [Form101Controller::class, 'prinf'])->name('form101s.prinf');
     Route::get('form101s/preview/{form}', [Form101Controller::class, 'preview'])->name('form101s.preview');
     Route::post('form101s/{id}/confirmar', [Form101Controller::class, 'confirmar'])->name('form101s.confirmar');
+    Route::post('form101s/{id}/enviar', [Form101Controller::class, 'enviar'])->name('form101s.enviar');
+    Route::post('form101s/{id}/rechazar', [Form101Controller::class, 'rechazar'])->name('form101s.rechazar');
+    Route::get('form101s/{id}/rejections', [Form101Controller::class, 'rejections'])->name('form101s.rejections');
+    Route::get('form101s/{id}/edits', [Form101Controller::class, 'edits'])->name('form101s.edits');
 
 
 

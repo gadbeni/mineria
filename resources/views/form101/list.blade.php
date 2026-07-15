@@ -48,7 +48,7 @@
                     </td>
 
                     <td style="text-align: center">
-                        @if($item->confirmado)
+                        @if($item->status == 'Confirmado')
                             <span class="label label-success" style="font-size:12px; padding:5px 10px">
                                 <i class="fa fa-check"></i> Confirmado
                             </span>
@@ -56,32 +56,67 @@
                             <small class="text-muted" style="font-size:10px">
                                 {{ \Carbon\Carbon::parse($item->confirmed_at)->format('d/m/Y H:i') }}
                             </small>
-                        @else
-                            <span class="label label-warning" style="font-size:12px; padding:5px 10px">
+                        @endif
+
+                        @if($item->status == 'Pendiente')
+                            <span class="label label-primary" style="font-size:12px; padding:5px 10px">
                                 <i class="fa fa-clock-o"></i> Pendiente
                             </span>
+                        @endif
+                        @if($item->status == 'Borrador')
+                            @if($item->reject_reason)
+                                <div style="border:1px solid #f1b0b7; background:#fdf3f4; border-radius:6px; padding:8px 10px; text-align:left; max-width:240px; margin:0 auto">
+                                    <div style="font-weight:600; color:#c0392b; font-size:12px; margin-bottom:4px">
+                                        <i class="fa fa-times-circle"></i> Rechazado
+                                    </div>
+                                    <div style="font-size:11px; color:#555; line-height:1.35">
+                                        <b>Motivo:</b> {{ \Illuminate\Support\Str::limit($item->reject_reason, 90) }}
+                                    </div>
+                                    <div style="font-size:10px; color:#999; margin-top:3px">
+                                        <i class="fa fa-clock-o"></i> {{ \Carbon\Carbon::parse($item->rejected_at)->format('d/m/Y H:i') }}
+                                    </div>
+                                    <a href="javascript:void(0)" onclick="abrirHistorial('{{ $item->id }}', '{{ $item->code }}')"
+                                       style="display:inline-block; margin-top:5px; font-size:11px; color:#c0392b">
+                                        <i class="fa fa-history"></i> Ver historial
+                                    </a>
+                                </div>
+                            @else
+                                <span class="label label-warning" style="font-size:12px; padding:5px 10px">
+                                    <i class="fa fa-clock-o"></i> Borrador
+                                </span>
+                            @endif
                         @endif
                     </td>
 
                     <td class="no-sort no-click bread-actions text-right">
-                        @if($item->confirmado)
+                        @if($item->status == 'Confirmado')
                             <a href="{{route('form101s.prinf', ['form'=>$item->id])}}"
                                onclick="window.open(this.href); return false;"
                                title="Imprimir" class="btn btn-sm btn-success">
                                 <i class="fa-solid fa-print"></i> Imprimir
                             </a>
-                        @else
+
+
+                            
+                        @endif
+
+                        @if($item->status == 'Pendiente')
                             @if(auth()->user()->hasRole('admin'))
-                                <a href="{{ route('form101s.preview', ['form' => $item->id]) }}"
-                                   onclick="window.open(this.href, '_blank'); return false;"
+                                <button type="button"
+                                   onclick="abrirPreview('{{ route('form101s.preview', ['form' => $item->id]) }}', '{{ $item->code }}')"
                                    title="Vista previa del formulario antes de confirmar"
                                    class="btn btn-sm btn-warning">
                                     <i class="fa fa-eye"></i> Vista Previa
-                                </a>
-                                <button type="button" class="btn btn-sm btn-primary"
+                                </button>
+                                <button type="button" class="btn btn-sm btn-success"
                                     onclick="abrirConfirmar('{{ $item->id }}', '{{ $item->code }}')"
                                     title="Confirmar para habilitar impresión">
                                     <i class="fa fa-check-circle"></i> Confirmar
+                                </button>
+                                <button type="button" class="btn btn-sm btn-danger"
+                                    onclick="abrirRechazar('{{ $item->id }}', '{{ $item->code }}')"
+                                    title="Rechazar formulario">
+                                    <i class="fa fa-times-circle"></i> Rechazar
                                 </button>
                             @else
                                 <span class="label label-default" style="font-size:11px; padding:5px 8px">
@@ -89,9 +124,21 @@
                                 </span>
                             @endif
                         @endif
-                        <button title="Borrar" class="btn btn-sm btn-danger delete" onclick="deleteItem('{{ route('form101s.destroy', ['form101' => $item->id]) }}')" data-toggle="modal" data-target="#myModalEliminar">
-                            <i class="voyager-trash"></i> <span class="hidden-xs hidden-sm">Borrar</span>
-                        </button>
+
+                        @if($item->status == 'Borrador')
+                            <a href="{{ route('form101s.edit', ['form101' => $item->id]) }}"
+                               title="Editar formulario" class="btn btn-sm btn-warning">
+                                <i class="fa fa-edit"></i> Editar
+                            </a>
+                            <button type="button" class="btn btn-sm btn-primary"
+                                onclick="abrirEnviar('{{ $item->id }}', '{{ $item->code }}')"
+                                title="Enviar formulario">
+                                <i class="fa fa-paper-plane"></i> Enviar
+                            </button>
+                            <button title="Borrar" class="btn btn-sm btn-danger delete" onclick="deleteItem('{{ route('form101s.destroy', ['form101' => $item->id]) }}')" data-toggle="modal" data-target="#myModalEliminar">
+                                <i class="voyager-trash"></i> <span class="hidden-xs hidden-sm">Borrar</span>
+                            </button>
+                        @endif
                     </td>
                     
                     

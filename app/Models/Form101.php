@@ -39,11 +39,15 @@ class Form101 extends Model
         'register_id',
         'deleted_id',
         'delete_reason',
+        'reject_reason',
+        'rejected_by',
+        'rejected_at',
+        'status',
         'observation',
-        'confirmado',
         'confirmed_at',
         'confirmed_by',
         'signature_id',
+        'status'
     ];
 
     public function certificate()
@@ -64,5 +68,20 @@ class Form101 extends Model
     public function confirmedBy()
     {
         return $this->belongsTo(\App\Models\User::class, 'confirmed_by');
+    }
+
+    public function registeredBy()
+    {
+        return $this->belongsTo(\App\Models\User::class, 'register_id');
+    }
+
+    public function rejections()
+    {
+        return $this->hasMany(Form101Rejection::class, 'form101_id')->orderBy('rejected_at', 'desc');
+    }
+
+    public function edits()
+    {
+        return $this->hasMany(Form101Edit::class, 'form101_id')->orderBy('edited_at', 'desc');
     }
 }

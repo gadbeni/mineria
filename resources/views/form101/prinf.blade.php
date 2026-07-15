@@ -4,7 +4,7 @@
 
 @section('content')
 @php $isPreview = $preview ?? false; @endphp
-@if(!$forms->confirmado && !$isPreview)
+@if($forms->status !== 'Confirmado' && !$isPreview)
     <div style="text-align:center; margin-top:60px">
         <i class="fa fa-lock" style="font-size:60px; color:#d9534f"></i>
         <h3 style="color:#d9534f">Documento no confirmado</h3>
@@ -18,7 +18,7 @@
             <i class="fa fa-eye" style="color:#f0ad4e"></i>
             <strong> VISTA PREVIA </strong> — Este formulario aún no ha sido confirmado. El documento se muestra tal como quedará al imprimir.
         </span>
-        <button onclick="window.close()" class="btn btn-xs btn-default" style="margin-left:16px">
+        <button onclick="if(window.parent && window.parent !== window && window.parent.jQuery){ window.parent.jQuery('#modalPreview').modal('hide'); } else { window.close(); }" class="btn btn-xs btn-default" style="margin-left:16px">
             <i class="fa fa-times"></i> Cerrar
         </button>
     </div>
