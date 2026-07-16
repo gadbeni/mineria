@@ -24,6 +24,13 @@
     </div>
 @endif
 <div id="form-wrapper">
+    @if($isPreview)
+        <div style="position:absolute; top:0; left:0; width:100%; height:100%; display:flex; align-items:center; justify-content:center; pointer-events:none; z-index:9999; overflow:hidden">
+            <span style="transform:rotate(-30deg); font-size:120px; font-weight:900; color:rgba(217,83,79,0.18); white-space:nowrap; letter-spacing:8px">
+                NO VÁLIDO
+            </span>
+        </div>
+    @endif
     <table width="100%">
         <tr>
             <td style="width: 15%"><img src="{{ asset('images/icon.png') }}" alt="" width="70px"></td>
