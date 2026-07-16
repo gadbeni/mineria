@@ -5,6 +5,7 @@ use App\Http\Controllers\CertificateController;
 use App\Http\Controllers\CompanyController;
 use App\Http\Controllers\Form101Controller;
 use App\Http\Controllers\ReportController;
+use App\Http\Controllers\UserHistoryController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\VerificationController;
 
@@ -30,7 +31,7 @@ Route::get('/verify/{token}', [VerificationController::class, 'verify'])->name('
 
 Route::get('certificates/{id?}/print', [CertificateController::class, 'print'])->name('certificates.print');
 
-Route::group(['prefix' => 'admin'], function () {
+Route::group(['prefix' => 'admin', 'middleware' => 'loggin'], function () {
     Voyager::routes();
 
     Route::resource('certificates', CertificateController::class);
@@ -64,6 +65,8 @@ Route::group(['prefix' => 'admin'], function () {
     Route::post('signatures/{id}/toggle-status', [AjaxController::class, 'toggleSignatureStatus'])->name('signatures.toggle-status');
 
     Route::get('download/log/{cad?}', [AjaxController::class, 'downloadLg'])->name('download.log');
+
+    Route::get('users/{id}/history', [UserHistoryController::class, 'show'])->name('users.history');
 
     Route::get('reports/form101s',   [ReportController::class, 'form101s'])->name('reports.form101s');
     Route::get('reports/certificates', [ReportController::class, 'certificates'])->name('reports.certificates');

@@ -113,6 +113,12 @@ return [
         'emergency' => [
             'path' => storage_path('logs/laravel.log'),
         ],
+        'requests' => [
+            'driver' => 'daily',
+            'path' => storage_path('logs/requests.log'),
+            'level' => 'info',
+            'days' => 0, // archivos requests-AAAA-MM-DD.log, 0 = nunca se eliminan
+        ],
     ],
 
 ];

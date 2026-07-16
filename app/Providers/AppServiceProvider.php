@@ -36,6 +36,11 @@ class AppServiceProvider extends ServiceProvider
             $this->app['request']->server->set('HTTPS', true);
         }
         Paginator::useBootstrap();
-        
+
+        // Botón "Historial" en la lista de usuarios (BREAD Voyager)
+        Voyager::addAction(\App\Actions\UserHistoryAction::class);
+
+        // Auditoría de modificaciones de usuario
+        \App\Models\User::observe(\App\Observers\UserObserver::class);
     }
 }
