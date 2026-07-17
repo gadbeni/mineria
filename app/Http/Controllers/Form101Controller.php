@@ -14,14 +14,15 @@ use Illuminate\Support\Str;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Barryvdh\DomPDF\PDF as DomPDFPDF;
 use App\Http\Controllers\HTML2PDF;
+use App\Models\Form101Rejection;
 use SimpleSoftwareIO\QrCode\Facades\QrCode;
 
 class Form101Controller extends Controller
 {
-    // public function __construct()
-    // {
-    //     $this->middleware('auth');
-    // }
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
 
 
     public function index()
@@ -444,7 +445,7 @@ class Form101Controller extends Controller
                 'rejected_at'   => $now,
             ]);
 
-            \App\Models\Form101Rejection::create([
+            Form101Rejection::create([
                 'form101_id'    => $form101->id,
                 'reject_reason' => $request->reject_reason,
                 'rejected_by'   => Auth::user()->id,
@@ -461,7 +462,7 @@ class Form101Controller extends Controller
 
     public function rejections($id)
     {
-        $rejections = \App\Models\Form101Rejection::with('rejectedBy')
+        $rejections = Form101Rejection::with('rejectedBy')
                         ->where('form101_id', $id)
                         ->orderBy('rejected_at', 'desc')
                         ->get()
