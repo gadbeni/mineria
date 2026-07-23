@@ -47,6 +47,7 @@
                                         <th>Nombre</th>
                                         <th>Apellido</th>
                                         <th>Cargo</th>
+                                        <th style="text-align:center">Firma</th>
                                         <th style="text-align:center">Estado</th>
                                         <th>Motivo de Baja</th>
                                         <th class="text-right">Acciones</th>
@@ -60,6 +61,16 @@
                                             <td>{{ $signature->first_name }}</td>
                                             <td>{{ $signature->last_name }}</td>
                                             <td>{{ $signature->job }}</td>
+                                            <td style="text-align:center">
+                                                @if($signature->image)
+                                                    <img src="{{ Voyager::image($signature->image) }}"
+                                                        alt="Firma {{ $signature->alias }} {{ $signature->first_name }}"
+                                                        style="max-height:45px; max-width:120px; cursor:pointer; background:#fff; border:1px solid #eee; border-radius:4px; padding:2px"
+                                                        onclick="verFirma('{{ Voyager::image($signature->image) }}', '{{ addslashes($signature->alias . ' ' . $signature->first_name . ' ' . $signature->last_name) }}')">
+                                                @else
+                                                    <span style="color:#bbb">— sin firma —</span>
+                                                @endif
+                                            </td>
                                             <td style="text-align:center">
                                                 @if($signature->status == 1)
                                                     <span class="label label-success" style="font-size:13px; padding:6px 12px">
@@ -75,6 +86,11 @@
                                                 {{ $signature->baja_reason ?? '—' }}
                                             </td>
                                             <td class="text-right" style="white-space:nowrap">
+                                                <a href="{{ route('voyager.signatures.show', $signature->id) }}"
+                                                    class="btn btn-sm btn-info" title="Ver registro completo">
+                                                    <i class="voyager-eye"></i> Ver
+                                                </a>
+
                                                 @if($signature->status == 1)
                                                     {{-- Botón que abre modal de baja --}}
                                                     <button type="button" class="btn btn-sm btn-warning"
@@ -108,6 +124,28 @@
                         </div>
 
                     </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {{-- Modal: Ver Firma --}}
+    <div class="modal fade" id="modal-firma" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header" style="background:#31708f; color:#fff">
+                    <button type="button" class="close" data-dismiss="modal"><span>&times;</span></button>
+                    <h4 class="modal-title"><i class="voyager-eye"></i> Firma de <span id="firma-nombre"></span></h4>
+                </div>
+                <div class="modal-body" style="text-align:center; background:#f8f8f8">
+                    <img id="firma-img" src="" alt="Firma"
+                        style="max-width:100%; max-height:60vh; background:#fff; border:1px solid #ddd; border-radius:4px; padding:10px">
+                </div>
+                <div class="modal-footer">
+                    <a id="firma-download" href="" target="_blank" class="btn btn-info">
+                        <i class="voyager-download"></i> Abrir en pestaña nueva
+                    </a>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
                 </div>
             </div>
         </div>
@@ -176,6 +214,13 @@
 
 @section('javascript')
     <script>
+        function verFirma(url, nombre) {
+            document.getElementById('firma-nombre').textContent = nombre;
+            document.getElementById('firma-img').src = url;
+            document.getElementById('firma-download').href = url;
+            $('#modal-firma').modal('show');
+        }
+
         function abrirModalBaja(id, nombre) {
             document.getElementById('baja-nombre').textContent = nombre;
             document.getElementById('baja_reason').value = '';

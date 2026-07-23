@@ -102,6 +102,24 @@ class ReportController extends Controller
 
         $subtotalUm = $request->subtotal_um; // '', 'kg', 'gr', 'total'
 
+        // Paginación solo para la tabla en pantalla (los totales/subtotales siguen
+        // calculándose sobre el conjunto completo $data).
+        $perPage = 20;
+        $page    = \Illuminate\Pagination\Paginator::resolveCurrentPage();
+        $data    = new \Illuminate\Pagination\LengthAwarePaginator(
+            $data->forPage($page, $perPage),
+            $data->count(),
+            $perPage,
+            $page,
+            ['path' => \Illuminate\Pagination\Paginator::resolveCurrentPath(), 'query' => $request->query()]
+        );
+
+        // Petición AJAX (cambio de página): devolver solo la tabla + paginación.
+        if ($request->ajax()) {
+            return view('reports.form101s.list',
+                compact('data', 'incluyeEliminados', 'subtotalUm', 'totalPesoNetoKg', 'totalPesoNetoGr', 'totalGeneralKg'));
+        }
+
         return view('reports.form101s',
             compact('data', 'desde', 'hasta', 'estado', 'incluyeEliminados', 'companies', 'empresaId', 'origen', 'destinoFinal', 'origenes', 'destinos', 'totalPesoNetoKg', 'totalPesoNetoGr', 'subtotalUm', 'totalGeneralKg'));
     }

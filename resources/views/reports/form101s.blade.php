@@ -131,7 +131,7 @@
                     </form>
 
                     <p class="text-muted">
-                        Total: <strong>{{ count($data) }}</strong> registro(s)
+                        Total: <strong>{{ $data->total() }}</strong> registro(s)
                         @if($desde || $hasta)
                             &mdash; Período:
                             {{ $desde ? \Carbon\Carbon::parse($desde)->format('d/m/Y') : '—' }}
@@ -140,114 +140,8 @@
                         @endif
                     </p>
 
-                    <div class="table-responsive">
-                        <table class="table table-bordered table-hover table-sm" style="font-size:12px">
-                            <thead style="background:#2e7d32; color:white">
-                                <tr>
-                                    <th>#</th>
-                                    <th>Código de Formulario</th>
-                                    <th>C.O.M.</th>
-                                    <th>Empresa / Razón Social</th>
-                                    <th>NIT</th>
-                                    <th>Tipo Mineral</th>
-                                    <th style="text-align:center">U.M.</th>
-                                    <th style="text-align:right">Peso Bruto</th>
-                                    <th style="text-align:right">Peso Neto</th>
-                                    <th>Municipio</th>
-                                    <th>Localidad</th>
-                                    <th>Origen</th>
-                                    <th>Destino Final</th>
-                                    <th style="text-align:center">Est. Formulario</th>
-                                    <th style="text-align:center">Est. C.O.M.</th>
-                                    <th style="text-align:center">Fecha Creación</th>
-                                    <th>Registrado por</th>
-                                    @if($incluyeEliminados)
-                                    <th style="text-align:center">Eliminado</th>
-                                    @endif
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @forelse($data as $i => $item)
-                                <tr @if($item->deleted_at) style="background:#fff3f3; color:#888" @endif>
-                                    <td>{{ $i + 1 }}</td>
-                                    <td><strong>{{ $item->code }}</strong></td>
-                                    <td>{{ $item->certificate?->company?->codeMiningOperator ?? '—' }}</td>
-                                    <td>{{ $item->certificate?->company?->razon ?? '—' }}</td>
-                                    <td>{{ $item->certificate?->company?->nit ?? '—' }}</td>
-                                    <td>{{ $item->typeMineral?->name ?? '—' }}</td>
-                                    <td style="text-align:center">{{ $item->unidaddemedida1 ?? '—' }}</td>
-                                    <td style="text-align:right">{{ $item->pesoBruto }}</td>
-                                    <td style="text-align:right">{{ $item->pesoNeto }}</td>
-                                    <td>{{ $item->municipio }}</td>
-                                    <td>{{ $item->localidad }}</td>
-                                    <td>{{ $item->origen }}</td>
-                                    <td>{{ $item->final }}</td>
-                                    <td style="text-align:center">
-                                        @if($item->status == 'Confirmado')
-                                            <span class="label label-success">Confirmado</span>
-                                        @elseif($item->status == 'Pendiente')
-                                            <span class="label label-warning">Pendiente</span>
-                                        @elseif($item->status == 'Borrador')
-                                            <span class="label label-default">Borrador</span>
-                                        @else
-                                            <span class="label label-default">{{ $item->status ?? '—' }}</span>
-                                        @endif
-                                    </td>
-                                    <td style="text-align:center">
-                                        @if($item->certificate?->dateFinish && \Carbon\Carbon::parse($item->certificate->dateFinish)->gte(\Carbon\Carbon::today()))
-                                            <span class="label label-success">Activo</span>
-                                        @elseif($item->certificate?->dateFinish)
-                                            <span class="label label-danger">Inactivo</span>
-                                        @else
-                                            <span class="label label-default">—</span>
-                                        @endif
-                                    </td>
-                                    <td style="text-align:center">
-                                        {{ \Carbon\Carbon::parse($item->created_at)->format('d/m/Y H:i') }}
-                                    </td>
-                                    <td>{{ optional($item->registeredBy)->name ?? '—' }}</td>
-                                    @if($incluyeEliminados)
-                                    <td style="text-align:center">
-                                        @if($item->deleted_at)
-                                            <span class="label label-danger">
-                                                {{ \Carbon\Carbon::parse($item->deleted_at)->format('d/m/Y') }}
-                                            </span>
-                                        @else
-                                            —
-                                        @endif
-                                    </td>
-                                    @endif
-                                </tr>
-                                @empty
-                                <tr>
-                                    <td colspan="{{ $incluyeEliminados ? 18 : 17 }}" style="text-align:center" class="text-muted">No hay registros para el período seleccionado.</td>
-                                </tr>
-                                @endforelse
-                            </tbody>
-                            <tfoot style="background:#eef5ee; font-weight:bold">
-                                @if(($subtotalUm ?? '') == '' || ($subtotalUm ?? '') == 'kg')
-                                <tr>
-                                    <td colspan="8" style="text-align:right">Subtotal Peso Neto (Kg):</td>
-                                    <td style="text-align:right">{{ number_format($totalPesoNetoKg, 2) }}</td>
-                                    <td colspan="{{ $incluyeEliminados ? 9 : 8 }}" style="text-align:left">Kg</td>
-                                </tr>
-                                @endif
-                                @if(($subtotalUm ?? '') == '' || ($subtotalUm ?? '') == 'gr')
-                                <tr>
-                                    <td colspan="8" style="text-align:right">Subtotal Peso Neto (Gr):</td>
-                                    <td style="text-align:right">{{ number_format($totalPesoNetoGr, 2) }}</td>
-                                    <td colspan="{{ $incluyeEliminados ? 9 : 8 }}" style="text-align:left">Gr</td>
-                                </tr>
-                                @endif
-                                @if(($subtotalUm ?? '') == 'total')
-                                <tr style="background:#e3eefc">
-                                    <td colspan="8" style="text-align:right">Total general (Gr convertidos a Kg + Kg):</td>
-                                    <td style="text-align:right">{{ number_format($totalGeneralKg, 2) }}</td>
-                                    <td colspan="{{ $incluyeEliminados ? 9 : 8 }}" style="text-align:left">Kg</td>
-                                </tr>
-                                @endif
-                            </tfoot>
-                        </table>
+                    <div id="report-results" style="position:relative">
+                        @include('reports.form101s.list')
                     </div>
 
                 </div>
@@ -269,5 +163,42 @@
     .table { font-size: 8px !important; }
     .label { border: 1px solid #ccc !important; color: #000 !important; background: none !important; }
 }
+#report-results.loading { opacity:.5; pointer-events:none; }
+#report-results .report-loader {
+    position:absolute; top:0; left:0; right:0; bottom:0; display:flex;
+    align-items:center; justify-content:center; background:rgba(255,255,255,.4); z-index:5;
+}
 </style>
+@stop
+
+@section('javascript')
+<script>
+    $(function () {
+        // Paginación AJAX: solo recarga la tabla, no toda la página.
+        $('#report-results').on('click', '.pagination a', function (e) {
+            e.preventDefault();
+            var url = $(this).attr('href');
+            if (!url) return;
+
+            var $wrap = $('#report-results');
+            $wrap.addClass('loading')
+                 .append('<div class="report-loader"><i class="fa fa-spinner fa-spin fa-2x"></i></div>');
+
+            $.ajax({
+                url: url,
+                type: 'GET',
+                headers: { 'X-Requested-With': 'XMLHttpRequest' },
+                success: function (html) {
+                    $wrap.removeClass('loading').html(html);
+                    window.history.pushState({}, '', url);
+                    $('html, body').animate({ scrollTop: $wrap.offset().top - 80 }, 200);
+                },
+                error: function () {
+                    $wrap.removeClass('loading').find('.report-loader').remove();
+                    alert('No se pudo cargar la página. Intente nuevamente.');
+                }
+            });
+        });
+    });
+</script>
 @stop

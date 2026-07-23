@@ -135,9 +135,11 @@
                                 title="Enviar formulario">
                                 <i class="fa fa-paper-plane"></i> Enviar
                             </button>
-                            <button title="Borrar" class="btn btn-sm btn-danger delete" onclick="deleteItem('{{ route('form101s.destroy', ['form101' => $item->id]) }}')" data-toggle="modal" data-target="#myModalEliminar">
-                                <i class="voyager-trash"></i> <span class="hidden-xs hidden-sm">Borrar</span>
-                            </button>
+                            @if(!$item->reject_reason)
+                                <button title="Borrar" class="btn btn-sm btn-danger delete" onclick="deleteItem('{{ route('form101s.destroy', ['form101' => $item->id]) }}')" data-toggle="modal" data-target="#myModalEliminar">
+                                    <i class="voyager-trash"></i> <span class="hidden-xs hidden-sm">Borrar</span>
+                                </button>
+                            @endif
                         @endif
                     </td>
                     
