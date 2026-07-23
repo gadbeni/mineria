@@ -55,7 +55,7 @@
                                 @include($row->details->view, ['row' => $row, 'dataType' => $dataType, 'dataTypeContent' => $dataTypeContent, 'content' => $dataTypeContent->{$row->field}, 'action' => 'read', 'view' => 'read', 'options' => $row->details])
                             @elseif($row->type == "image")
                                 {{-- Vista mejorada de firma --}}
-                                @if($dataTypeContent->{$row->field} && (filter_var($dataTypeContent->{$row->field}, FILTER_VALIDATE_URL) || Storage::disk(config('voyager.storage.disk'))->exists($dataTypeContent->{$row->field})))
+                                @if(!empty($dataTypeContent->{$row->field}))
                                     <div style="text-align:center; padding:12px 0">
                                         <div style="display:inline-block; background:#fff; border:1px solid #e5e5e5; border-radius:10px; padding:22px 34px; box-shadow:0 3px 14px rgba(0,0,0,.08)">
                                             <img src="{{ filter_var($dataTypeContent->{$row->field}, FILTER_VALIDATE_URL) ? $dataTypeContent->{$row->field} : Voyager::image($dataTypeContent->{$row->field}) }}"
